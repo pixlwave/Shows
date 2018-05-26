@@ -60,7 +60,7 @@ class YouTube {
     }
     
     static func reloadPlaylistItems(for channel: YTChannelItem) {
-        guard let url = URL(string: "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=\(channel.playlistID)&maxResults=20&key=\(key)") else { return }
+        guard let url = URL(string: "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=\(channel.playlistID)&maxResults=50&key=\(key)") else { return }
         let task = session.dataTask(with: url) { (data, response, error) in
             if let data = data {
                 do {
@@ -78,14 +78,18 @@ class YouTube {
     }
     
     static func sortSubscriptions() {
-        subscriptions.sort { channel1, channel2 -> Bool in
-            guard let date1 = channel1.videos.first?.snippet.publishedAt else { return false }
-            guard let date2 = channel2.videos.first?.snippet.publishedAt else { return true }
-            return date1.compare(date2) == .orderedDescending
-        }
-        
-        DispatchQueue.main.async {
-            NotificationCenter.default.post(Notification(name: .subsUpdated))
+        session.getAllTasks { tasks in
+            guard tasks.count == 0 else { return }
+            
+            subscriptions.sort { channel1, channel2 -> Bool in
+                guard let date1 = channel1.videos.first?.snippet.publishedAt else { return false }
+                guard let date2 = channel2.videos.first?.snippet.publishedAt else { return true }
+                return date1.compare(date2) == .orderedDescending
+            }
+            
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(Notification(name: .subsUpdated))
+            }
         }
     }
     
