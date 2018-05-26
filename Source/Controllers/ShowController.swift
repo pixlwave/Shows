@@ -2,7 +2,7 @@ import UIKit
 
 class ShowController: UICollectionViewController {
     
-    var show: YouTubeChannel?
+    var show: YTChannelItem?
     
     override func viewWillAppear(_ animated: Bool) {
         navigationItem.title = show?.name

@@ -1,7 +1,6 @@
 import Foundation
 
-struct YTChannelItem: Codable {
-    let kind: String
+class YTChannelItem: Codable {
     let etag: String
     let id: String
     let snippet: Snippet
@@ -13,11 +12,6 @@ struct YTChannelItem: Codable {
         let customUrl: String?
         let publishedAt: Date
         let thumbnails: [String: YTThumbnail]
-//        let defaultLanguage: String
-//        let localized: [String: String]
-//          "title": string
-//          "description": string
-//        let country: String
     }
     
     struct ContentDetails: Codable {
@@ -29,4 +23,16 @@ struct YTChannelItem: Codable {
             let watchLater: String
         }
     }
+    
+    enum CodingKeys: String, CodingKey {
+        case etag
+        case id
+        case snippet
+        case contentDetails
+    }
+    
+    var name: String { return snippet.title }
+    var playlistID: String { return contentDetails.relatedPlaylists.uploads }
+    var thumbnailURL: URL? { return URL(string: snippet.thumbnails.first?.value.url ?? "")}
+    var videos = [YTPlaylistItem]()
 }

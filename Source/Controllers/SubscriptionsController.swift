@@ -10,8 +10,6 @@ class SubscriptionsController: UICollectionViewController {
         super.viewDidAppear(animated)
         
         NotificationCenter.default.addObserver(self, selector: #selector(update), name: .subsUpdated, object: nil)
-        
-        YouTube.reload()
     }
     
     @objc func update() {

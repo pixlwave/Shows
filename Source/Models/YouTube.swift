@@ -13,43 +13,39 @@ class YouTube {
         return decoder
     }()
     
-    static var subscriptions: [YouTubeChannel] = [
-        YouTubeChannel(id: "UCtinbF-Q-fVthA0qrFQTgXQ"),
-        YouTubeChannel(id: "UCzz4CoEgSgWNs9ZAvRMhW2A"),
-        YouTubeChannel(id: "UCPzFLpOblZEaIx2lpym1l1A"),
-        YouTubeChannel(id: "UCUK0HBIBWgM2c4vsPhkYY4w"),
-        YouTubeChannel(id: "UC3fg6pL63upkXCc0T203wVg"),
-        YouTubeChannel(id: "UCknMR7NOY6ZKcVbyzOxQPhw"),
-        YouTubeChannel(id: "UC3KEoMzNz8eYnwBC34RaKCQ"),
-        YouTubeChannel(id: "UC4_m1_0MTTmnWo4tpB0O_7g"),
-        YouTubeChannel(id: "UCbvIIQc5Jo9-jIXnkPe03oA"),
-        YouTubeChannel(id: "UCwC0l6riU37de9Nn_cC7pxw"),
-        YouTubeChannel(id: "UCKuHFYu3smtrl2AwwMOXOlg"),
-        YouTubeChannel(id: "UCcM_6ay33BNpChknCrMCgig"),
-        YouTubeChannel(id: "UCT_EEbG4JlI-ww9j2FGJ99A"),
-        YouTubeChannel(id: "UC3DkFux8Iv-aYnTRWzwaiBA"),
-        YouTubeChannel(id: "UCBJycsmduvYEL83R_U4JriQ"),
-        YouTubeChannel(id: "UCp8mr0kjVyVAmvexLDqB60A")
+    static var subscriptions = [YTChannelItem]()
+    static let defaultSubscriptionIDs = [
+        "UCtinbF-Q-fVthA0qrFQTgXQ",
+        "UCzz4CoEgSgWNs9ZAvRMhW2A",
+        "UCPzFLpOblZEaIx2lpym1l1A",
+        "UCUK0HBIBWgM2c4vsPhkYY4w",
+        "UC3fg6pL63upkXCc0T203wVg",
+        "UCknMR7NOY6ZKcVbyzOxQPhw",
+        "UC3KEoMzNz8eYnwBC34RaKCQ",
+        "UC4_m1_0MTTmnWo4tpB0O_7g",
+        "UCbvIIQc5Jo9-jIXnkPe03oA",
+        "UCwC0l6riU37de9Nn_cC7pxw",
+        "UCKuHFYu3smtrl2AwwMOXOlg",
+        "UCcM_6ay33BNpChknCrMCgig",
+        "UCT_EEbG4JlI-ww9j2FGJ99A",
+        "UC3DkFux8Iv-aYnTRWzwaiBA",
+        "UCBJycsmduvYEL83R_U4JriQ",
+        "UCp8mr0kjVyVAmvexLDqB60A"
     ]
     
     static func reload() {
-        for show in subscriptions { update(show) }
+        for show in subscriptions { reloadPlaylistItems(for: show) }
     }
     
-    static func update(_ channel: YouTubeChannel) {
-        guard let url = URL(string: "https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails&id=\(channel.id)&key=\(key)") else { return }
+    static func subscribe(to id: String) {
+        guard let url = URL(string: "https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails&id=\(id)&key=\(key)") else { return }
         let task = session.dataTask(with: url) { (data, response, error) in
             if let data = data {
                 do {
                     let channelList = try jsonDecoder.decode(YTChannelListResponse.self, from: data)
                     guard let channelItem = channelList.items.first else { return }
-                    let playlistID = channelItem.contentDetails.relatedPlaylists.uploads
-                    let channelName = channelItem.snippet.title
-                    
-                    channel.playlistID = playlistID
-                    channel.name = channelName
-                    channel.thumbnailURL = URL(string: channelItem.snippet.thumbnails.first?.value.url ?? "")
-                    playlistItems(for: channel)    // TODO: This should be somewhere else?
+                    reloadPlaylistItems(for: channelItem)
+                    subscriptions.append(channelItem)
                 } catch {
                     print("Error \(error)")
                 }
@@ -59,9 +55,8 @@ class YouTube {
         task.resume()
     }
     
-    static func playlistItems(for channel: YouTubeChannel) {
-        guard let playlistID = channel.playlistID else { return }
-        guard let url = URL(string: "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=\(playlistID)&maxResults=20&key=\(key)") else { return }
+    static func reloadPlaylistItems(for channel: YTChannelItem) {
+        guard let url = URL(string: "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=\(channel.playlistID)&maxResults=20&key=\(key)") else { return }
         let task = session.dataTask(with: url) { (data, response, error) in
             if let data = data {
                 do {
