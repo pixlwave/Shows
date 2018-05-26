@@ -10,7 +10,7 @@ struct YTPlaylistItem: Codable {
         let channelId: String
         let title: String
         let description: String
-        let thumbnails: [String: YTThumbnail]
+        let thumbnails: YTThumbnails
         let channelTitle: String
         let playlistId: String
         let position: UInt
@@ -21,5 +21,6 @@ struct YTPlaylistItem: Codable {
         }
     }
     
-    var thumbnailURL: URL? { return URL(string: snippet.thumbnails.first?.value.url ?? "") }
+    var thumbnailURL: URL? { return URL(string: snippet.thumbnails.medium.url) }
+    var videoID: String { return snippet.resourceId.videoId }
 }

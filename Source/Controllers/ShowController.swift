@@ -44,7 +44,7 @@ extension ShowController {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let videoItem = show?.videos[indexPath.row] else { return }
-        guard let url = URL(string: "https://youtu.be/\(videoItem.snippet.resourceId.videoId)") else { return }
+        guard let url = URL(string: "https://youtu.be/\(videoItem.videoID)") else { return }
         UIApplication.shared.open(url)
     }
     

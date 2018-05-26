@@ -6,12 +6,19 @@ class YTChannelItem: Codable {
     let snippet: Snippet
     let contentDetails: ContentDetails
     
+    enum CodingKeys: String, CodingKey {
+        case etag
+        case id
+        case snippet
+        case contentDetails
+    }
+    
     struct Snippet: Codable {
         let title: String
         let description: String
         let customUrl: String?
         let publishedAt: Date
-        let thumbnails: [String: YTThumbnail]
+        let thumbnails: YTThumbnails
     }
     
     struct ContentDetails: Codable {
@@ -24,15 +31,8 @@ class YTChannelItem: Codable {
         }
     }
     
-    enum CodingKeys: String, CodingKey {
-        case etag
-        case id
-        case snippet
-        case contentDetails
-    }
-    
     var name: String { return snippet.title }
     var playlistID: String { return contentDetails.relatedPlaylists.uploads }
-    var thumbnailURL: URL? { return URL(string: snippet.thumbnails.first?.value.url ?? "")}
+    var thumbnailURL: URL? { return URL(string: snippet.thumbnails.medium.url)}
     var videos = [YTPlaylistItem]()
 }
