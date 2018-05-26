@@ -4,8 +4,6 @@ struct YTPlaylistItem: Codable {
     let etag: String
     let id: String
     let snippet: Snippet
-//    let contentDetails: ContentDetails
-//    let status: PlaylistItemStatus
     
     struct Snippet: Codable {
         let publishedAt: Date
@@ -19,20 +17,9 @@ struct YTPlaylistItem: Codable {
         let resourceId: ResourceID
         
         struct ResourceID: Codable {
-            let kind: String
             let videoId: String
         }
     }
     
-    struct ContentDetails: Codable {
-        let videoId: String
-        let startAt: String
-        let endAt: String
-        let note: String
-        let videoPublishedAt: Date
-    }
-    
-    struct PlaylistItemStatus: Codable {
-        let privacyStatus: String
-    }
+    var thumbnailURL: URL? { return URL(string: snippet.thumbnails.first?.value.url ?? "") }
 }

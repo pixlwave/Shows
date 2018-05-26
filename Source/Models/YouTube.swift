@@ -55,6 +55,10 @@ class YouTube {
         task.resume()
     }
     
+    static func reloadSubscriptionInfo() {
+        // TODO: Implement this
+    }
+    
     static func reloadPlaylistItems(for channel: YTChannelItem) {
         guard let url = URL(string: "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=\(channel.playlistID)&maxResults=20&key=\(key)") else { return }
         let task = session.dataTask(with: url) { (data, response, error) in
