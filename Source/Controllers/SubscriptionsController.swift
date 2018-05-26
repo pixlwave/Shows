@@ -39,12 +39,10 @@ extension SubscriptionsController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let show = YouTube.subscriptions[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ShowCell", for: indexPath) as? ShowCell ?? ShowCell()
-        cell.nameLabel?.text = show.name
+        cell.nameLabel.text = show.name
         
-        thumbnailDownload: if let url = show.thumbnailURL {
-            guard let data = try? Data(contentsOf: url) else { break thumbnailDownload }
-            guard let image = UIImage(data: data) else { break thumbnailDownload }
-            cell.thumbnailImageView?.image = image
+        if let url = show.thumbnailURL {
+            cell.thumbnailImageView.load(from: url)
         }
         
         return cell

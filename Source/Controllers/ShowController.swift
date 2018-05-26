@@ -28,10 +28,8 @@ extension ShowController {
             cell.timeLabel.text = publishedString + " ago"
         }
         
-        thumbnailDownload: if let urlString = video.snippet.thumbnails["high"]?.url, let url = URL(string: urlString) {
-            guard let data = try? Data(contentsOf: url) else { break thumbnailDownload }
-            guard let image = UIImage(data: data) else { break thumbnailDownload }
-            cell.thumbnailImageView.image = image
+        if let url = video.thumbnailURL {
+            cell.thumbnailImageView.load(from: url)
         }
         
         return cell
