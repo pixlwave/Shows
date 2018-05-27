@@ -1,9 +1,15 @@
 import Foundation
 
-struct YTPlaylistItem: Codable {
+class YTPlaylistItem: Codable {
     let etag: String
     let id: String
     let snippet: Snippet
+    
+    enum CodingKeys: String, CodingKey {
+        case etag
+        case id
+        case snippet
+    }
     
     struct Snippet: Codable {
         let publishedAt: Date
@@ -23,4 +29,8 @@ struct YTPlaylistItem: Codable {
     
     var thumbnailURL: URL? { return URL(string: snippet.thumbnails.medium.url) }
     var videoID: String { return snippet.resourceId.videoId }
+    var watched: Bool {
+        get { return Cloud.queryWatchedStatus(of: videoID) }
+        set { Cloud.mark(videoID, as: newValue) }
+    }
 }

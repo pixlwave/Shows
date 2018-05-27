@@ -32,7 +32,7 @@ class YTChannelItem: Codable {
     }
     
     var name: String { return snippet.title }
-    var playlistID: String { return contentDetails.relatedPlaylists.uploads }
     var thumbnailURL: URL? { return URL(string: snippet.thumbnails.medium.url)}
+    var playlistID: String { return contentDetails.relatedPlaylists.uploads }
     var videos = [YTPlaylistItem]()
 }

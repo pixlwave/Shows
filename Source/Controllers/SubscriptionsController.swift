@@ -29,7 +29,6 @@ class SubscriptionsController: UICollectionViewController {
 
 
 // MARK: UICollectionViewDataSource
-
 extension SubscriptionsController {
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -52,7 +51,6 @@ extension SubscriptionsController {
 
 
 // MARK: UICollectionViewDelegate
-
 extension SubscriptionsController {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

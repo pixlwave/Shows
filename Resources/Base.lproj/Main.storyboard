@@ -113,15 +113,25 @@
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.75" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Watched" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vml-VO-5o8">
+                                            <rect key="frame" x="0.0" y="74.5" width="148" height="14.5"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                 </view>
                                 <constraints>
+                                    <constraint firstItem="Vml-VO-5o8" firstAttribute="leading" secondItem="Luc-nn-mUl" secondAttribute="leading" id="AGc-1A-9ag"/>
                                     <constraint firstItem="iyc-Uu-6Jc" firstAttribute="trailing" secondItem="Hyd-ng-B01" secondAttribute="trailing" id="Awd-8b-RyV"/>
                                     <constraint firstItem="Luc-nn-mUl" firstAttribute="width" secondItem="dKq-H1-ncD" secondAttribute="width" multiplier="0.5" id="F2T-nR-Mll"/>
                                     <constraint firstAttribute="trailing" secondItem="Hyd-ng-B01" secondAttribute="trailing" id="I24-XU-mTA"/>
                                     <constraint firstItem="Luc-nn-mUl" firstAttribute="leading" secondItem="dKq-H1-ncD" secondAttribute="leading" id="JPG-OO-Q5d"/>
+                                    <constraint firstItem="Vml-VO-5o8" firstAttribute="trailing" secondItem="Luc-nn-mUl" secondAttribute="trailing" id="NGX-IE-F1m"/>
                                     <constraint firstItem="iyc-Uu-6Jc" firstAttribute="leading" secondItem="Hyd-ng-B01" secondAttribute="leading" id="Npj-3E-5YA"/>
                                     <constraint firstItem="Hyd-ng-B01" firstAttribute="leading" secondItem="Luc-nn-mUl" secondAttribute="trailing" constant="4" id="PM1-ft-wMa"/>
+                                    <constraint firstItem="Vml-VO-5o8" firstAttribute="bottom" secondItem="Luc-nn-mUl" secondAttribute="bottom" id="R0e-Ec-8b2"/>
                                     <constraint firstItem="iyc-Uu-6Jc" firstAttribute="bottom" secondItem="Luc-nn-mUl" secondAttribute="bottom" id="V0U-DL-x55"/>
                                     <constraint firstItem="Hyd-ng-B01" firstAttribute="top" secondItem="Luc-nn-mUl" secondAttribute="top" id="a0K-q1-uXJ"/>
                                     <constraint firstItem="iyc-Uu-6Jc" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Hyd-ng-B01" secondAttribute="bottom" constant="4" id="cM2-cv-e9f"/>
@@ -131,6 +141,7 @@
                                     <outlet property="thumbnailImageView" destination="Luc-nn-mUl" id="ie4-KE-K9V"/>
                                     <outlet property="timeLabel" destination="iyc-Uu-6Jc" id="LHn-kl-r7A"/>
                                     <outlet property="titleLabel" destination="Hyd-ng-B01" id="Un7-pT-9le"/>
+                                    <outlet property="watchedLabel" destination="Vml-VO-5o8" id="tQw-Hg-csl"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
