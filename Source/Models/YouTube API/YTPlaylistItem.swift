@@ -30,7 +30,7 @@ class YTPlaylistItem: Codable {
     var thumbnailURL: URL? { return URL(string: snippet.thumbnails.medium.url) }
     var videoID: String { return snippet.resourceId.videoId }
     var watched: Bool {
-        get { return Cloud.queryWatchedStatus(of: videoID) }
-        set { Cloud.mark(videoID, as: newValue) }
+        get { return UserData.queryWatchedStatus(of: videoID) }
+        set { UserData.mark(videoID, as: newValue) }
     }
 }

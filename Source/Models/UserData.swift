@@ -1,6 +1,6 @@
 import Foundation
 
-class Cloud {
+class UserData {
     
     private static var store = NSUbiquitousKeyValueStore.default
     

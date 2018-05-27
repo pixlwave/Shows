@@ -33,8 +33,6 @@ class YouTube {
         "UCp8mr0kjVyVAmvexLDqB60A"
     ]
     
-    
-    
     static func reload() {
         for show in subscriptions { reloadPlaylistItems(for: show) }
     }
@@ -84,14 +82,12 @@ class YouTube {
             guard tasks.count == 0 else { return }
             
             subscriptions.sort { channel1, channel2 -> Bool in
-                guard let date1 = channel1.videos.first?.snippet.publishedAt else { return false }
-                guard let date2 = channel2.videos.first?.snippet.publishedAt else { return true }
+                guard let date1 = channel1.nextVideo?.snippet.publishedAt else { return false }
+                guard let date2 = channel2.nextVideo?.snippet.publishedAt else { return true }
                 return date1.compare(date2) == .orderedDescending
             }
             
-            DispatchQueue.main.async {
-                NotificationCenter.default.post(Notification(name: .subsUpdated))
-            }
+            DispatchQueue.main.async { NotificationCenter.default.post(Notification(name: .subsUpdated)) }
         }
     }
     

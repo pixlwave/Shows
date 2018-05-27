@@ -34,5 +34,7 @@ class YTChannelItem: Codable {
     var name: String { return snippet.title }
     var thumbnailURL: URL? { return URL(string: snippet.thumbnails.medium.url)}
     var playlistID: String { return contentDetails.relatedPlaylists.uploads }
+    
     var videos = [YTPlaylistItem]()
+    var nextVideo: YTPlaylistItem? { return videos.filter { !$0.watched }.first }
 }

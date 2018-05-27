@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     @objc func processCloudUpdates() {
-        Cloud.reloadWatchedList()
+        UserData.reloadWatchedList()
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
