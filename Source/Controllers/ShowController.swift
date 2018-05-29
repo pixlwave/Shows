@@ -4,8 +4,30 @@ class ShowController: UICollectionViewController {
     
     var show: YTChannelItem?
     
+    var refreshControl = UIRefreshControl()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        refreshControl.addTarget(self, action: #selector(refreshShow), for: .valueChanged)
+        collectionView?.refreshControl = refreshControl
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .showUpdated, object: nil)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         navigationItem.title = show?.name
+    }
+    
+    @objc func refreshShow() {
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.show?.refreshVideos()
+        }
+    }
+    
+    @objc func reloadData() {
+        collectionView?.reloadData()
+        refreshControl.endRefreshing()
     }
     
 }

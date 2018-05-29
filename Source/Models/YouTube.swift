@@ -35,24 +35,29 @@ class YouTube {
     
     static func reload() {
         for show in subscriptions { reloadPlaylistItems(for: show) }
+        sortSubscriptions()
     }
     
     static func subscribe(to id: String) {
+        let semaphore = DispatchSemaphore(value: 0)
         guard let url = URL(string: "https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails&id=\(id)&key=\(key)") else { return }
+        
         let task = session.dataTask(with: url) { (data, response, error) in
             if let data = data {
                 do {
                     let channelList = try jsonDecoder.decode(YTChannelListResponse.self, from: data)
                     guard let channelItem = channelList.items.first else { return }
-                    reloadPlaylistItems(for: channelItem)
                     subscriptions.append(channelItem)
                 } catch {
                     print("Error \(error)")
                 }
+                semaphore.signal()
             }
         }
         
         task.resume()
+        
+        semaphore.wait()
     }
     
     static func reloadSubscriptionInfo() {
@@ -60,21 +65,26 @@ class YouTube {
     }
     
     static func reloadPlaylistItems(for channel: YTChannelItem) {
+        let semaphore = DispatchSemaphore(value: 0)
         guard let url = URL(string: "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=\(channel.playlistID)&maxResults=50&key=\(key)") else { return }
+        
         let task = session.dataTask(with: url) { (data, response, error) in
             if let data = data {
                 do {
                     let playlistItemList = try jsonDecoder.decode(YTPlaylistItemListResponse.self, from: data)
                     print("Success")
                     channel.videos = playlistItemList.items
-                    sortSubscriptions()
                 } catch {
                     print("Error \(error)")
                 }
+                
+                semaphore.signal()
             }
         }
-        
+            
         task.resume()
+        
+        semaphore.wait()
     }
     
     static func sortSubscriptions() {

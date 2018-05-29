@@ -2,6 +2,7 @@ import UIKit
 
 extension Notification.Name {
     static let subsUpdated = Notification.Name("subsUpdated")
+    static let showUpdated = Notification.Name("showUpdated")
 }
 
 extension Formatter {

@@ -2,18 +2,30 @@ import UIKit
 
 class SubscriptionsController: UICollectionViewController {
     
+    var refreshControl = UIRefreshControl()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        refreshControl.addTarget(self, action: #selector(refreshSubscriptions), for: .valueChanged)
+        collectionView?.refreshControl = refreshControl
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(update), name: .subsUpdated, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .subsUpdated, object: nil)
     }
     
-    @objc func update() {
+    @objc func refreshSubscriptions() {
+        DispatchQueue.global(qos: .userInitiated).async {
+            YouTube.reload()
+        }
+    }
+    
+    @objc func reloadData() {
         collectionView?.reloadData()
+        refreshControl.endRefreshing()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

@@ -10,6 +10,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let store = NSUbiquitousKeyValueStore.default
         NotificationCenter.default.addObserver(self, selector: #selector(processCloudUpdates), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: store)
         for id in YouTube.defaultSubscriptionIDs { YouTube.subscribe(to: id) }
+        YouTube.reload()
         store.synchronize()
         
         return true
