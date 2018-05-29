@@ -22,6 +22,7 @@ extension ShowController {
         guard let video = show?.videos[indexPath.row] else { return UICollectionViewCell() }
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoCell", for: indexPath) as? VideoCell ?? VideoCell()
         cell.titleLabel.text = video.snippet.title
+        cell.thumbnailImageView.image = nil
         cell.watchedLabel.isHidden = !video.watched
         
         if let publishedString = Formatter.timeInterval.string(from: video.snippet.publishedAt, to: Date()) {

@@ -39,6 +39,7 @@ extension SubscriptionsController {
         let show = YouTube.subscriptions[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ShowCell", for: indexPath) as? ShowCell ?? ShowCell()
         cell.nameLabel.text = show.name
+        cell.thumbnailImageView.image = nil
         
         if let url = show.thumbnailURL {
             cell.thumbnailImageView.load(from: url)
