@@ -39,7 +39,8 @@ class YTChannelItem: Codable {
     var nextVideo: YTPlaylistItem? { return videos.filter { !$0.watched }.first }
     
     func refreshVideos() {
-        YouTube.reloadPlaylistItems(for: self)
-        DispatchQueue.main.async { NotificationCenter.default.post(Notification(name: .showUpdated)) }
+        YouTube.reloadPlaylistItems(for: self) {
+            DispatchQueue.main.async { NotificationCenter.default.post(Notification(name: .showUpdated)) }
+        }
     }
 }

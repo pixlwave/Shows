@@ -33,14 +33,35 @@ class YouTube {
         "UCp8mr0kjVyVAmvexLDqB60A"
     ]
     
-    static func reload() {
-        for show in subscriptions { reloadPlaylistItems(for: show) }
-        sortSubscriptions()
+    
+    static func loadSubscriptions() {
+        let group = DispatchGroup()
+        
+        for id in defaultSubscriptionIDs {
+            group.enter()
+            subscribe(to: id) { group.leave() }
+        }
+        
+        group.notify(queue: DispatchQueue.main, work: DispatchWorkItem(block: {
+            sortSubscriptions()
+        }))
     }
     
-    static func subscribe(to id: String) {
-        let semaphore = DispatchSemaphore(value: 0)
-        guard let url = URL(string: "https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails&id=\(id)&key=\(key)") else { return }
+    static func reload() {
+        let group = DispatchGroup()
+        
+        for show in subscriptions {
+            group.enter()
+            reloadPlaylistItems(for: show) { group.leave() }
+        }
+        
+        group.notify(queue: DispatchQueue.main, work: DispatchWorkItem(block: {
+            sortSubscriptions()
+        }))
+    }
+    
+    static func subscribe(to id: String, completionHandler: @escaping () -> Void) {
+        guard let url = URL(string: "https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails&id=\(id)&key=\(key)") else { completionHandler(); return }
         
         let task = session.dataTask(with: url) { (data, response, error) in
             if let data = data {
@@ -48,25 +69,25 @@ class YouTube {
                     let channelList = try jsonDecoder.decode(YTChannelListResponse.self, from: data)
                     guard let channelItem = channelList.items.first else { return }
                     subscriptions.append(channelItem)
+                    reloadPlaylistItems(for: channelItem, completionHandler: completionHandler)
                 } catch {
                     print("Error \(error)")
+                    completionHandler()
                 }
-                semaphore.signal()
+            } else {
+                completionHandler()
             }
         }
         
         task.resume()
-        
-        semaphore.wait()
     }
     
     static func reloadSubscriptionInfo() {
         // TODO: Implement this
     }
     
-    static func reloadPlaylistItems(for channel: YTChannelItem) {
-        let semaphore = DispatchSemaphore(value: 0)
-        guard let url = URL(string: "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=\(channel.playlistID)&maxResults=50&key=\(key)") else { return }
+    static func reloadPlaylistItems(for channel: YTChannelItem, completionHandler: @escaping () -> Void) {
+        guard let url = URL(string: "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=\(channel.playlistID)&maxResults=50&key=\(key)") else { completionHandler(); return }
         
         let task = session.dataTask(with: url) { (data, response, error) in
             if let data = data {
@@ -76,28 +97,21 @@ class YouTube {
                 } catch {
                     print("Error \(error)")
                 }
-                
-                semaphore.signal()
             }
+            completionHandler()
         }
             
         task.resume()
-        
-        semaphore.wait()
     }
     
     static func sortSubscriptions() {
-        session.getAllTasks { tasks in
-            guard tasks.count == 0 else { return }
-            
-            subscriptions.sort { channel1, channel2 -> Bool in
-                guard let date1 = channel1.nextVideo?.snippet.publishedAt else { return false }
-                guard let date2 = channel2.nextVideo?.snippet.publishedAt else { return true }
-                return date1.compare(date2) == .orderedDescending
-            }
-            
-            DispatchQueue.main.async { NotificationCenter.default.post(Notification(name: .subsUpdated)) }
+        subscriptions.sort { channel1, channel2 -> Bool in
+            guard let date1 = channel1.nextVideo?.snippet.publishedAt else { return false }
+            guard let date2 = channel2.nextVideo?.snippet.publishedAt else { return true }
+            return date1.compare(date2) == .orderedDescending
         }
+        
+        NotificationCenter.default.post(Notification(name: .subsUpdated))
     }
     
 }

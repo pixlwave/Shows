@@ -9,8 +9,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         let store = NSUbiquitousKeyValueStore.default
         NotificationCenter.default.addObserver(self, selector: #selector(processCloudUpdates), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: store)
-        for id in YouTube.defaultSubscriptionIDs { YouTube.subscribe(to: id) }
-        YouTube.reload()
+        YouTube.loadSubscriptions()
         store.synchronize()
         
         return true
