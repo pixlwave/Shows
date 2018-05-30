@@ -124,6 +124,7 @@
                                         </label>
                                     </subviews>
                                 </view>
+                                <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstItem="Vml-VO-5o8" firstAttribute="leading" secondItem="Luc-nn-mUl" secondAttribute="leading" id="AGc-1A-9ag"/>
                                     <constraint firstItem="iyc-Uu-6Jc" firstAttribute="trailing" secondItem="Hyd-ng-B01" secondAttribute="trailing" id="Awd-8b-RyV"/>
@@ -140,8 +141,8 @@
                                     <constraint firstItem="Luc-nn-mUl" firstAttribute="centerY" secondItem="dKq-H1-ncD" secondAttribute="centerY" id="vzT-lb-9uK"/>
                                 </constraints>
                                 <connections>
+                                    <outlet property="publishedAtLabel" destination="iyc-Uu-6Jc" id="LHn-kl-r7A"/>
                                     <outlet property="thumbnailImageView" destination="Luc-nn-mUl" id="ie4-KE-K9V"/>
-                                    <outlet property="timeLabel" destination="iyc-Uu-6Jc" id="LHn-kl-r7A"/>
                                     <outlet property="titleLabel" destination="Hyd-ng-B01" id="Un7-pT-9le"/>
                                     <outlet property="watchedLabel" destination="Vml-VO-5o8" id="tQw-Hg-csl"/>
                                 </connections>
@@ -150,10 +151,16 @@
                         <connections>
                             <outlet property="dataSource" destination="P26-Qz-82N" id="FPe-eG-p7b"/>
                             <outlet property="delegate" destination="P26-Qz-82N" id="ZDS-TT-duk"/>
+                            <outletCollection property="gestureRecognizers" destination="ofs-hs-4Wc" appends="YES" id="CNv-fS-PhY"/>
                         </connections>
                     </collectionView>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B2t-d3-I6f" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="ofs-hs-4Wc">
+                    <connections>
+                        <action selector="showVideoOptions:" destination="P26-Qz-82N" id="ORv-IB-iZo"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1833.75" y="90.845070422535215"/>
         </scene>

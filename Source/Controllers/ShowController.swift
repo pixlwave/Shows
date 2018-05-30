@@ -30,6 +30,29 @@ class ShowController: UICollectionViewController {
         refreshControl.endRefreshing()
     }
     
+    @IBAction func showVideoOptions(_ sender: UIGestureRecognizer) {
+        if sender.state == .began {
+            let tapLocation = sender.location(in: collectionView)
+            guard let indexPath = collectionView?.indexPathForItem(at: tapLocation) else { return }
+            guard let video = show?.videos[indexPath.row] else { return }
+            
+            let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            let watchedActionTitle = video.watched ? "Mark as unwatched" : "Mark as watched"
+            let watchedAction = UIAlertAction(title: watchedActionTitle, style: .default) { action in
+                video.watched = !video.watched
+                if let cell = self.collectionView?.cellForItem(at: indexPath) as? VideoCell {
+                    cell.watchedLabel.isHidden = !video.watched
+                }
+            }
+            actionSheet.addAction(watchedAction)
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+            actionSheet.addAction(cancelAction)
+            
+            present(actionSheet, animated: true)
+        }
+    }
+    
 }
 
 
@@ -48,7 +71,7 @@ extension ShowController {
         cell.watchedLabel.isHidden = !video.watched
         
         if let publishedString = Formatter.timeInterval.string(from: video.snippet.publishedAt, to: Date()) {
-            cell.timeLabel.text = publishedString + " ago"
+            cell.publishedAtLabel.text = publishedString + " ago"
         }
         
         if let url = video.thumbnailURL {

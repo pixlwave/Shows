@@ -72,7 +72,6 @@ class YouTube {
             if let data = data {
                 do {
                     let playlistItemList = try jsonDecoder.decode(YTPlaylistItemListResponse.self, from: data)
-                    print("Success")
                     channel.videos = playlistItemList.items
                 } catch {
                     print("Error \(error)")
