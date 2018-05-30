@@ -13,7 +13,9 @@ class PlayerController: UIViewController {
         
         guard let video = video else { return }
         guard let url = URL(string: "https://www.youtube-nocookie.com/embed/\(video.videoID)") else { return }
-        let request = URLRequest(url: url)
+        
+        var request = URLRequest(url: url)
+        request.httpShouldHandleCookies = false
         webView.load(request)
     }
     
