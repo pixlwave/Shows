@@ -8,6 +8,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -145,6 +146,7 @@
                                     <outlet property="thumbnailImageView" destination="Luc-nn-mUl" id="ie4-KE-K9V"/>
                                     <outlet property="titleLabel" destination="Hyd-ng-B01" id="Un7-pT-9le"/>
                                     <outlet property="watchedLabel" destination="Vml-VO-5o8" id="tQw-Hg-csl"/>
+                                    <segue destination="rMw-zH-dT7" kind="show" identifier="PlayerSegue" id="QiE-cU-Ry3"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -163,6 +165,40 @@
                 </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1833.75" y="90.845070422535215"/>
+        </scene>
+        <!--Player Controller-->
+        <scene sceneID="qk5-b0-VFb">
+            <objects>
+                <viewController id="rMw-zH-dT7" customClass="PlayerController" customModule="Shows" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Dy1-Ou-aJ7">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s5E-Gt-mGo">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <wkWebViewConfiguration key="configuration" allowsInlineMediaPlayback="YES">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="s5E-Gt-mGo" firstAttribute="top" secondItem="YeX-vQ-QLc" secondAttribute="top" id="KrR-4l-rVB"/>
+                            <constraint firstItem="s5E-Gt-mGo" firstAttribute="leading" secondItem="YeX-vQ-QLc" secondAttribute="leading" id="Z2U-I4-hkc"/>
+                            <constraint firstItem="YeX-vQ-QLc" firstAttribute="trailing" secondItem="s5E-Gt-mGo" secondAttribute="trailing" id="f52-aQ-lRs"/>
+                            <constraint firstItem="YeX-vQ-QLc" firstAttribute="bottom" secondItem="s5E-Gt-mGo" secondAttribute="bottom" id="ohs-C7-0G9"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="YeX-vQ-QLc"/>
+                    </view>
+                    <connections>
+                        <outlet property="webView" destination="s5E-Gt-mGo" id="cc8-w5-0lM"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yow-yt-V3h" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2795.625" y="90.845070422535215"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="olG-MJ-q34">

@@ -19,6 +19,19 @@ class ShowController: UICollectionViewController {
         navigationItem.title = show?.name
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "PlayerSegue" {
+            guard let destVC = segue.destination as? PlayerController else { return }
+            guard let tappedCell = sender as? VideoCell else { return }
+            guard let videoIndex = collectionView?.indexPath(for: tappedCell)?.row else { return }
+            guard let video = show?.videos[videoIndex] else { return }
+            destVC.video = video
+            
+            video.watched = true
+            tappedCell.watchedLabel.isHidden = false
+        }
+    }
+    
     @objc func refreshShow() {
         DispatchQueue.global(qos: .userInitiated).async {
             self.show?.refreshVideos()
@@ -88,12 +101,7 @@ extension ShowController {
 extension ShowController {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let videoItem = show?.videos[indexPath.row] else { return }
-        guard let url = URL(string: "https://youtu.be/\(videoItem.videoID)") else { return }
-        videoItem.watched = true
-        UIApplication.shared.open(url)
-        // TODO: mark the video as watched a bit later.
-        (collectionView.cellForItem(at: indexPath) as? VideoCell)?.watchedLabel.isHidden = false
+        //
     }
     
 }
