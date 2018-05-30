@@ -12,7 +12,7 @@ class PlayerController: UIViewController {
         super.viewWillAppear(animated)
         
         guard let video = video else { return }
-        guard let url = URL(string: "https://www.youtube-nocookie.com/embed/\(video.videoID)") else { return }
+        guard let url = URL(string: "https://www.youtube-nocookie.com/embed/\(video.videoID)?rel=0&showinfo=0") else { return }
         
         var request = URLRequest(url: url)
         request.httpShouldHandleCookies = false
