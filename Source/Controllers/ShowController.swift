@@ -48,20 +48,22 @@ class ShowController: UICollectionViewController {
             let tapLocation = sender.location(in: collectionView)
             guard let indexPath = collectionView?.indexPathForItem(at: tapLocation) else { return }
             guard let video = show?.videos[indexPath.row] else { return }
-            
+            let cell = self.collectionView?.cellForItem(at: indexPath) as? VideoCell
+
             let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
             let watchedActionTitle = video.watched ? "Mark as unwatched" : "Mark as watched"
             let watchedAction = UIAlertAction(title: watchedActionTitle, style: .default) { action in
                 video.watched = !video.watched
-                if let cell = self.collectionView?.cellForItem(at: indexPath) as? VideoCell {
-                    cell.watchedLabel.isHidden = !video.watched
-                }
+                cell?.watchedLabel.isHidden = !video.watched
             }
             actionSheet.addAction(watchedAction)
             
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
             actionSheet.addAction(cancelAction)
             
+            actionSheet.popoverPresentationController?.sourceView = cell
+            actionSheet.popoverPresentationController?.sourceRect = cell?.bounds ?? CGRect.zero
+            actionSheet.popoverPresentationController?.permittedArrowDirections = [.up, .down]
             present(actionSheet, animated: true)
         }
     }
