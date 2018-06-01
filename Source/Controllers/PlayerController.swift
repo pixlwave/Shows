@@ -4,16 +4,29 @@ import WebKit
 class PlayerController: UIViewController {
     
     var video: YTPlaylistItem?
-    var loaded = false
     
-    @IBOutlet weak var webView: WKWebView!
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    let webView: WKWebView = {
+        let configuration = WKWebViewConfiguration()
+        configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
+        configuration.allowsAirPlayForMediaPlayback = true
+        configuration.mediaTypesRequiringUserActionForPlayback = []
         
+        let webView = WKWebView(frame: CGRect.zero, configuration: configuration)
         webView.isHidden = true
         webView.customUserAgent = "Shows App"
+        return webView
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.addSubview(webView)
         loadEmbedHTML()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        let safeArea = view.safeAreaInsets
+        webView.frame = CGRect(x: safeArea.left, y: safeArea.top, width: view.frame.width - safeArea.left - safeArea.right, height: view.frame.height - safeArea.top - safeArea.bottom)
     }
     
     func loadEmbedURL() {
@@ -54,6 +67,7 @@ class PlayerController: UIViewController {
                 width: '1280',
                 height: '720',
 		        videoId: '\(videoID)',
+                playerVars: {rel: 0, showinfo: 0},
 		        events: {
 		            'onReady': onPlayerReady
 		        }
