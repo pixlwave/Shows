@@ -250,9 +250,21 @@
                     <view key="view" contentMode="scaleToFill" id="Dy1-Ou-aJ7">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="5ye-S6-iXU">
+                                <rect key="frame" x="142" y="298" width="37" height="37"/>
+                            </activityIndicatorView>
+                        </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="5ye-S6-iXU" firstAttribute="centerY" secondItem="YeX-vQ-QLc" secondAttribute="centerY" id="Iho-sA-C1g"/>
+                            <constraint firstItem="5ye-S6-iXU" firstAttribute="centerX" secondItem="YeX-vQ-QLc" secondAttribute="centerX" id="vLL-9E-Dez"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="YeX-vQ-QLc"/>
                     </view>
+                    <connections>
+                        <outlet property="videoLoadingIndicator" destination="5ye-S6-iXU" id="ihd-B2-gp0"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yow-yt-V3h" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
