@@ -60,6 +60,24 @@ class YouTube {
         }))
     }
     
+    static func search(for query: String, completionHandler: @escaping ([YTSearchResult]) -> Void) {
+        guard let url = URL(string: "https://www.googleapis.com/youtube/v3/search?part=snippet&q=\(query)&type=channel&maxResults=15&key=\(key)") else { completionHandler([YTSearchResult]()); return }
+        
+        let task = session.dataTask(with: url) { data, response, error in
+            if let data = data {
+                do {
+                    let searchList = try jsonDecoder.decode(YTSearchListResonse.self, from: data)
+                    completionHandler(searchList.items)
+                } catch {
+                    print("Error \(error)")
+                    completionHandler([YTSearchResult]())
+                }
+            }
+        }
+        
+        task.resume()
+    }
+    
     static func subscribe(to id: String, completionHandler: @escaping () -> Void) {
         guard let url = URL(string: "https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails&id=\(id)&key=\(key)") else { completionHandler(); return }
         
@@ -67,7 +85,7 @@ class YouTube {
             if let data = data {
                 do {
                     let channelList = try jsonDecoder.decode(YTChannelListResponse.self, from: data)
-                    guard let channelItem = channelList.items.first else { return }
+                    guard let channelItem = channelList.items.first else { completionHandler(); return }
                     subscriptions.append(channelItem)
                     reloadPlaylistItems(for: channelItem, completionHandler: completionHandler)
                 } catch {

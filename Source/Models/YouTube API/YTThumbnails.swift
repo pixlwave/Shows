@@ -17,8 +17,8 @@ struct YTThumbnails: Codable {
     
     struct Thumbnail: Codable {
         let url: String
-        let width: UInt
-        let height: UInt
+        let width: UInt?
+        let height: UInt?
         
         enum CodingKeys: String, CodingKey {
             case url
