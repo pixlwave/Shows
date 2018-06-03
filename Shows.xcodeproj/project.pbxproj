@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A50161A020B811130060E96A /* Key in Resources */ = {isa = PBXBuildFile; fileRef = A501619F20B811130060E96A /* Key */; };
 		A50161A220B815F90060E96A /* MaskedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50161A120B815F90060E96A /* MaskedImageView.swift */; };
+		A50547E320C4390400573C11 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A50547E220C4390400573C11 /* CloudKit.framework */; };
 		A51F1A5820C2A34000D3284C /* YTSearchListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F1A5720C2A34000D3284C /* YTSearchListResponse.swift */; };
 		A51F1A5A20C2A8FF00D3284C /* ShowSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F1A5920C2A8FF00D3284C /* ShowSearchController.swift */; };
 		A52C40FD20B822560017D7AA /* VideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52C40FC20B822560017D7AA /* VideoCell.swift */; };
@@ -36,6 +37,7 @@
 /* Begin PBXFileReference section */
 		A501619F20B811130060E96A /* Key */ = {isa = PBXFileReference; lastKnownFileType = text; name = Key; path = Resources/Key; sourceTree = SOURCE_ROOT; };
 		A50161A120B815F90060E96A /* MaskedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskedImageView.swift; sourceTree = "<group>"; };
+		A50547E220C4390400573C11 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		A508CD7420BABEF80053A261 /* Shows.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Shows.entitlements; sourceTree = "<group>"; };
 		A51F1A5720C2A34000D3284C /* YTSearchListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YTSearchListResponse.swift; sourceTree = "<group>"; };
 		A51F1A5920C2A8FF00D3284C /* ShowSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowSearchController.swift; sourceTree = "<group>"; };
@@ -68,12 +70,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A50547E320C4390400573C11 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A50547E120C4390400573C11 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A50547E220C4390400573C11 /* CloudKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A531813320B6E03400EC9282 = {
 			isa = PBXGroup;
 			children = (
@@ -81,6 +92,7 @@
 				A531813E20B6E03400EC9282 /* Source */,
 				A531815120B6E06500EC9282 /* Resources */,
 				A531813D20B6E03400EC9282 /* Products */,
+				A50547E120C4390400573C11 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -197,6 +209,9 @@
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
 							com.apple.iCloud = {
 								enabled = 1;
 							};
@@ -399,7 +414,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Shows.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = NU8A5Y875P;
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = uk.pixlwave.Shows;
@@ -415,7 +430,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Shows.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = NU8A5Y875P;
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = uk.pixlwave.Shows;
