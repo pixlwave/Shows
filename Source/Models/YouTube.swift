@@ -14,30 +14,12 @@ class YouTube {
     }()
     
     static var subscriptions = [YTChannelItem]()
-    static let defaultSubscriptionIDs = [
-        "UCtinbF-Q-fVthA0qrFQTgXQ",
-        "UCzz4CoEgSgWNs9ZAvRMhW2A",
-        "UCPzFLpOblZEaIx2lpym1l1A",
-        "UCUK0HBIBWgM2c4vsPhkYY4w",
-        "UC3fg6pL63upkXCc0T203wVg",
-        "UCknMR7NOY6ZKcVbyzOxQPhw",
-        "UC3KEoMzNz8eYnwBC34RaKCQ",
-        "UC4_m1_0MTTmnWo4tpB0O_7g",
-        "UCbvIIQc5Jo9-jIXnkPe03oA",
-        "UCwC0l6riU37de9Nn_cC7pxw",
-        "UCKuHFYu3smtrl2AwwMOXOlg",
-        "UCcM_6ay33BNpChknCrMCgig",
-        "UCT_EEbG4JlI-ww9j2FGJ99A",
-        "UC3DkFux8Iv-aYnTRWzwaiBA",
-        "UCBJycsmduvYEL83R_U4JriQ",
-        "UCp8mr0kjVyVAmvexLDqB60A"
-    ]
-    
     
     static func loadSubscriptions() {
+        subscriptions = [YTChannelItem]()
         let group = DispatchGroup()
         
-        for id in defaultSubscriptionIDs {
+        for id in UserData.subscriptionIDs {
             group.enter()
             subscribe(to: id) { group.leave() }
         }
@@ -87,6 +69,7 @@ class YouTube {
                     let channelList = try jsonDecoder.decode(YTChannelListResponse.self, from: data)
                     guard let channelItem = channelList.items.first else { completionHandler(); return }
                     subscriptions.append(channelItem)
+                    UserData.addSubscription(to: id)
                     reloadPlaylistItems(for: channelItem, completionHandler: completionHandler)
                 } catch {
                     print("Error \(error)")
