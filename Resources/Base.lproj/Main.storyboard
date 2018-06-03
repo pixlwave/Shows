@@ -70,7 +70,7 @@
                         </connections>
                     </collectionView>
                     <navigationItem key="navigationItem" title="Shows" id="O5W-8Q-RSP">
-                        <barButtonItem key="rightBarButtonItem" systemItem="search" id="Vlf-9c-sE4">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Vlf-9c-sE4">
                             <connections>
                                 <segue destination="pwd-LK-XxZ" kind="show" identifier="SearchSegue" id="GKA-nf-pEM"/>
                             </connections>
