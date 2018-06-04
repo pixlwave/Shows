@@ -10,6 +10,7 @@ class PlayerController: UIViewController {
     let webView: WKWebView = {
         let configuration = WKWebViewConfiguration()
         configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
+        configuration.allowsInlineMediaPlayback = false
         configuration.allowsAirPlayForMediaPlayback = true
         configuration.mediaTypesRequiringUserActionForPlayback = []
         
