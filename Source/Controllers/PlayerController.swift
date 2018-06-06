@@ -49,15 +49,6 @@ class PlayerController: UIViewController {
         present(shareSheet, animated: true)
     }
     
-    func loadEmbedURL() {
-        guard let video = video else { return }
-        guard let url = URL(string: "https://www.youtube-nocookie.com/embed/\(video.videoID)?vq=hd720&rel=0&showinfo=0") else { return }
-
-        var request = URLRequest(url: url)
-        request.httpShouldHandleCookies = false
-        webView.load(request)
-    }
-    
     func loadEmbedHTML() {
         guard let video = video else { return }
         let htmlString = html(for: video.videoID)
