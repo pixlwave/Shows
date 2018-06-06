@@ -58,11 +58,21 @@ class ShowController: UICollectionViewController {
             }
             actionSheet.addAction(watchedAction)
             
+            let shareAction = UIAlertAction(title: "Share", style: .default) { action in
+                guard let shareURL = URL(string: "https://youtu.be/\(video.videoID)") else { return }
+                let shareSheet = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+                shareSheet.popoverPresentationController?.sourceView = cell
+                shareSheet.popoverPresentationController?.sourceRect = cell?.bounds ?? .zero
+                shareSheet.popoverPresentationController?.permittedArrowDirections = [.up, .down]
+                self.present(shareSheet, animated: true)
+            }
+            actionSheet.addAction(shareAction)
+            
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
             actionSheet.addAction(cancelAction)
             
             actionSheet.popoverPresentationController?.sourceView = cell
-            actionSheet.popoverPresentationController?.sourceRect = cell?.bounds ?? CGRect.zero
+            actionSheet.popoverPresentationController?.sourceRect = cell?.bounds ?? .zero
             actionSheet.popoverPresentationController?.permittedArrowDirections = [.up, .down]
             present(actionSheet, animated: true)
         }

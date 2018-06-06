@@ -45,6 +45,7 @@ class PlayerController: UIViewController {
     @IBAction func shareVideo(_ sender: UIBarButtonItem) {
         guard let video = video, let shareURL = URL(string: "https://youtu.be/\(video.videoID)") else { return }
         let shareSheet = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+        shareSheet.popoverPresentationController?.barButtonItem = sender    // FIXME: centre sheet arrow on button
         present(shareSheet, animated: true)
     }
     
