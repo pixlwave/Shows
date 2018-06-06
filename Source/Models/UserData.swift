@@ -7,6 +7,22 @@ class UserData {
     private(set) static var subscriptionIDs: [String] = [String]()
     private static var watchedList: [String] = [String]()
     
+    static func listenForChanges() {
+        saveSubcription(of: "YouTubeVideo", to: userDB)
+        saveSubcription(of: "YouTubeChannel", to: userDB)
+    }
+    
+    static func saveSubcription(of recordType: String, to database: CKDatabase) {
+        let subscription = CKQuerySubscription(recordType: recordType, predicate: NSPredicate(value: true), options: [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion])
+        subscription.notificationInfo = CKNotificationInfo()
+        subscription.notificationInfo?.shouldSendContentAvailable = true
+        subscription.notificationInfo?.title = recordType
+        database.save(subscription) { subscription, error in
+            if let error = error { print("Error \(error)"); return }
+            print("Success: registered \(recordType) subscription")
+        }
+    }
+    
     static func reloadSubscriptions() {
         let query = CKQuery(recordType: "YouTubeChannel", predicate: NSPredicate(value: true))
         userDB.perform(query, inZoneWith: nil) { (records, error) in

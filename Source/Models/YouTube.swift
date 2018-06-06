@@ -69,7 +69,7 @@ class YouTube {
                     let channelList = try jsonDecoder.decode(YTChannelListResponse.self, from: data)
                     guard let channelItem = channelList.items.first else { completionHandler(); return }
                     subscriptions.append(channelItem)
-                    UserData.addSubscription(to: id)
+                    UserData.addSubscription(to: id)    // FIXME: This gets called on initial load. Needs getChannel()
                     reloadPlaylistItems(for: channelItem, completionHandler: completionHandler)
                 } catch {
                     print("Error \(error)")

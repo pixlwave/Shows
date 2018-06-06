@@ -5,13 +5,12 @@ import CloudKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    let videoSubscription = CKQuerySubscription(recordType: "YouTubeVideo", predicate: NSPredicate(value: true), subscriptionID: "YouTubeVideo", options: [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion])
-    let channelSubscription = CKQuerySubscription(recordType: "YouTubeChannel", predicate: NSPredicate(value: true), subscriptionID: "YouTubeChannel", options: [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion])
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         application.registerForRemoteNotifications()
         UserData.reloadWatchedList()
         UserData.reloadSubscriptions()
+        UserData.listenForChanges()
         
         return true
     }
@@ -19,8 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         let cloudNotification = CKNotification(fromRemoteNotificationDictionary: userInfo)
         if cloudNotification.notificationType == .query {
-            if cloudNotification.subscriptionID == "YouTubeVideo" { UserData.reloadWatchedList() }
-            if cloudNotification.subscriptionID == "YouTubeChannel" { UserData.reloadSubscriptions() }
+            if cloudNotification.title == "YouTubeVideo" { UserData.reloadWatchedList() }
+            if cloudNotification.title == "YouTubeChannel" { UserData.reloadSubscriptions() }
         }
     }
     
