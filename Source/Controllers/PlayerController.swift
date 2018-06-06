@@ -42,6 +42,12 @@ class PlayerController: UIViewController {
         videoLoadingIndicator.stopAnimating()
     }
     
+    @IBAction func shareVideo(_ sender: UIBarButtonItem) {
+        guard let video = video, let shareURL = URL(string: "https://youtu.be/\(video.videoID)") else { return }
+        let shareSheet = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+        present(shareSheet, animated: true)
+    }
+    
     func loadEmbedURL() {
         guard let video = video else { return }
         guard let url = URL(string: "https://www.youtube-nocookie.com/embed/\(video.videoID)?vq=hd720&rel=0&showinfo=0") else { return }
