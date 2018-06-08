@@ -4,6 +4,7 @@ extension Notification.Name {
     static let subsUpdated = Notification.Name("subsUpdated")
     static let showUpdated = Notification.Name("showUpdated")
     static let videoBeganPlaying = Notification.Name("videoBeganPlaying")
+    static let videoPausedWithProgress = Notification.Name("videoPausedWithProgress")
 }
 
 extension Formatter {

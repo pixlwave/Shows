@@ -17,6 +17,7 @@ class PlayerController: UIViewController {
         let userContentController = WKUserContentController()
         let messageHandler = WebKitMessageHandler()
         userContentController.add(messageHandler, name: "videoBeganPlaying")
+        userContentController.add(messageHandler, name: "videoPausedWithProgress")
         configuration.userContentController = userContentController
         
         let webView = WKWebView(frame: CGRect.zero, configuration: configuration)
@@ -29,6 +30,7 @@ class PlayerController: UIViewController {
         super.viewDidLoad()
         
         NotificationCenter.default.addObserver(self, selector: #selector(videoBeganPlaying), name: .videoBeganPlaying, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(videoPausedWithProgress), name: .videoPausedWithProgress, object: nil)
         view.addSubview(webView)
         loadEmbedHTML()
     }
@@ -40,6 +42,11 @@ class PlayerController: UIViewController {
     
     @objc func videoBeganPlaying() {
         videoLoadingIndicator.stopAnimating()
+    }
+    
+    @objc func videoPausedWithProgress(notification: Notification) {
+        guard let progress = notification.userInfo?["progress"] as? Double else { return }
+        video?.progress = progress
     }
     
     @IBAction func shareVideo(_ sender: UIBarButtonItem) {
@@ -93,7 +100,13 @@ class PlayerController: UIViewController {
         }
         
         function onPlayerStateChange(event) {
-            if (event.data == YT.PlayerState.PLAYING) window.webkit.messageHandlers.videoBeganPlaying.postMessage(true);
+            if (event.data == YT.PlayerState.PLAYING) {
+            	window.webkit.messageHandlers.videoBeganPlaying.postMessage(true);
+            } else if (event.data == YT.PlayerState.PAUSED) {
+            	window.webkit.messageHandlers.videoPausedWithProgress.postMessage(player.getCurrentTime() / player.getDuration());
+            } else if (event.data == YTPlayerState.ENDED) {
+                window.webkit.messageHandlers.videoPausedWithProgress.postMessage(1.0);
+            }
         }
     </script>
 </body>
@@ -108,6 +121,11 @@ class PlayerController: UIViewController {
 // MARK: WKScriptMessageHandler
 class WebKitMessageHandler: NSObject, WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        DispatchQueue.main.async { NotificationCenter.default.post(Notification(name: .videoBeganPlaying)) }
+        if message.name == "videoBeganPlaying" {
+            DispatchQueue.main.async { NotificationCenter.default.post(Notification(name: .videoBeganPlaying)) }
+        } else if message.name == "videoPausedWithProgress" {
+            guard let progress = message.body as? Double else { return }
+            DispatchQueue.main.async { NotificationCenter.default.post(name: .videoPausedWithProgress, object: nil, userInfo: ["progress": progress]) }
+        }
     }
 }

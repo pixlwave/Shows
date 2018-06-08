@@ -152,7 +152,7 @@
             </objects>
             <point key="canvasLocation" x="901.875" y="877.81690140845069"/>
         </scene>
-        <!--Title-->
+        <!--Show-->
         <scene sceneID="TNQ-Ns-28N">
             <objects>
                 <collectionViewController id="P26-Qz-82N" customClass="ShowController" customModule="Shows" customModuleProvider="target" sceneMemberID="viewController">
@@ -233,7 +233,7 @@
                             <outletCollection property="gestureRecognizers" destination="ofs-hs-4Wc" appends="YES" id="CNv-fS-PhY"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" title="Title" id="pYr-B1-CFh"/>
+                    <navigationItem key="navigationItem" title="Show" id="pYr-B1-CFh"/>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B2t-d3-I6f" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="ofs-hs-4Wc">

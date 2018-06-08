@@ -5,7 +5,7 @@ class UserData {
     private static var userDB = CKContainer.default().privateCloudDatabase
     
     private(set) static var subscriptionIDs: [String] = [String]()
-    private static var watchedList: [String] = [String]()
+    private static var watchProgressCache: [String: Double] = [String: Double]()
     
     static func listenForChanges() {
         saveSubcription(of: "YouTubeVideo", to: userDB)
@@ -47,27 +47,35 @@ class UserData {
         let query = CKQuery(recordType: "YouTubeVideo", predicate: NSPredicate(value: true))
         userDB.perform(query, inZoneWith: nil) { (records, error) in
             guard let records = records else { print("Error: \(error)"); return }
-            let newList = records.map { $0.recordID.recordName }
-            watchedList = newList
+            var newList = [String: Double]()
+            for record in records { newList[record.recordID.recordName] = record["progress"] as? Double ?? 0 }
+            watchProgressCache = newList
         }
     }
     
-    static func queryWatchedStatus(of videoID: String) -> Bool {
-        return watchedList.contains(videoID)
+    static func queryProgress(of videoID: String) -> Double {
+        return watchProgressCache[videoID] ?? 0
     }
     
-    static func mark(_ videoID: String, as watched: Bool) {
+    static func set(_ progress: Double, for videoID: String) {
         let videoRecordID = CKRecordID(recordName: videoID)
-        if watched == true {
-            watchedList.append(videoID)
+        
+        if progress > 0 {
+            watchProgressCache[videoID] = progress
+    
+            userDB.fetch(withRecordID: videoRecordID) { record, error in
+                if let error = error { print("Error \(error)"); return }
+                
+            }
             
             let videoRecord = CKRecord(recordType: "YouTubeVideo", recordID: videoRecordID)
+            videoRecord["progress"] = progress as CKRecordValue
             userDB.save(videoRecord) { video, error in
                 if let error = error { print("Error \(error)"); return }
                 print("Success: \(videoID) Saved")
             }
         } else {
-            if let index = watchedList.index(of: videoID) { watchedList.remove(at: index) }
+            if watchProgressCache.contains(where: { $0.key == videoID }) { watchProgressCache.removeValue(forKey: videoID) }
             
             userDB.delete(withRecordID: videoRecordID) { record, error in
                 if let error = error { print("Error \(error)"); return }

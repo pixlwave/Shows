@@ -29,8 +29,12 @@ class YTPlaylistItem: Codable {
     
     var thumbnailURL: URL? { return URL(string: snippet.thumbnails.medium.url) }
     var videoID: String { return snippet.resourceId.videoId }
-    var watched: Bool {
-        get { return UserData.queryWatchedStatus(of: videoID) }
-        set { UserData.mark(videoID, as: newValue) }
+    var progress: Double {
+        get { return UserData.queryProgress(of: videoID) }
+        set { UserData.set(newValue, for: videoID) }
+    }
+    
+    func toggleWatched() {
+        progress = progress > 0 ? 0 : 1
     }
 }

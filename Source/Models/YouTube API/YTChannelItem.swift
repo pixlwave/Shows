@@ -36,7 +36,7 @@ class YTChannelItem: Codable {
     var playlistID: String { return contentDetails.relatedPlaylists.uploads }
     
     var videos = [YTPlaylistItem]()
-    var nextVideo: YTPlaylistItem? { return videos.filter { !$0.watched }.first }
+    var nextVideo: YTPlaylistItem? { return videos.filter { $0.progress <= 0 }.first }
     
     func refreshVideos() {
         YouTube.reloadPlaylistItems(for: self) {
