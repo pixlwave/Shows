@@ -8,9 +8,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         application.registerForRemoteNotifications()
-        UserData.reloadWatchedList()
         UserData.reloadSubscriptions()
-        UserData.listenForChanges()
         
         return true
     }
@@ -18,7 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         let cloudNotification = CKNotification(fromRemoteNotificationDictionary: userInfo)
         if cloudNotification.notificationType == .query {
-            if cloudNotification.title == "YouTubeVideo" { UserData.reloadWatchedList() }
             if cloudNotification.title == "YouTubeChannel" { UserData.reloadSubscriptions() }
         }
     }

@@ -50,13 +50,13 @@ class ShowController: UICollectionViewController {
             let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
             let watchedActionTitle = video.progress > 0 ? "Mark as unwatched" : "Mark as watched"
             let watchedAction = UIAlertAction(title: watchedActionTitle, style: .default) { action in
-                video.toggleWatched()
-                cell?.watchedLabel.isHidden = video.progress <= 0
+                video.watched = !video.watched
+                cell?.watchedLabel.isHidden = !video.watched
             }
             actionSheet.addAction(watchedAction)
             
             let shareAction = UIAlertAction(title: "Share", style: .default) { action in
-                guard let shareURL = URL(string: "https://youtu.be/\(video.videoID)") else { return }
+                guard let shareURL = URL(string: "https://youtu.be/\(video.id)") else { return }
                 let shareSheet = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
                 shareSheet.popoverPresentationController?.sourceView = cell
                 shareSheet.popoverPresentationController?.sourceRect = cell?.bounds ?? .zero
@@ -88,13 +88,10 @@ extension ShowController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let video = show?.videos[indexPath.row] else { return UICollectionViewCell() }
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoCell", for: indexPath) as? VideoCell ?? VideoCell()
-        cell.titleLabel.text = video.snippet.title
+        cell.titleLabel.text = video.title
         cell.thumbnailImageView.image = nil
         cell.watchedLabel.isHidden = video.progress <= 0
-        
-        if let publishedString = Formatter.timeInterval.string(from: video.snippet.publishedAt, to: Date()) {
-            cell.publishedAtLabel.text = publishedString + " ago"
-        }
+        cell.publishedAtLabel.text = video.publishedString
         
         if let url = video.thumbnailURL {
             cell.thumbnailImageView.load(from: url)

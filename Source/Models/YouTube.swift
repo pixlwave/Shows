@@ -94,7 +94,7 @@ class YouTube {
             if let data = data {
                 do {
                     let playlistItemList = try jsonDecoder.decode(YTPlaylistItemListResponse.self, from: data)
-                    channel.videos = playlistItemList.items
+                    channel.videos = playlistItemList.items.map { Video(item: $0) }     // FIXME: this erases user data
                 } catch {
                     print("Error \(error)")
                 }
@@ -107,8 +107,8 @@ class YouTube {
     
     static func sortSubscriptions() {
         subscriptions.sort { channel1, channel2 -> Bool in
-            guard let date1 = channel1.nextVideo?.snippet.publishedAt else { return false }
-            guard let date2 = channel2.nextVideo?.snippet.publishedAt else { return true }
+            guard let date1 = channel1.nextVideo?.publishedAt else { return false }
+            guard let date2 = channel2.nextVideo?.publishedAt else { return true }
             return date1.compare(date2) == .orderedDescending
         }
         
