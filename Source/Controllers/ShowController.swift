@@ -2,7 +2,7 @@ import UIKit
 
 class ShowController: UICollectionViewController {
     
-    var show: YTChannelItem?
+    var show: Channel?
     
     var refreshControl = UIRefreshControl()
     
@@ -31,7 +31,7 @@ class ShowController: UICollectionViewController {
     
     @objc func refreshShow() {
         DispatchQueue.global(qos: .userInitiated).async {
-            self.show?.refreshVideos()
+            self.show?.reloadPlaylistItems { }
         }
     }
     

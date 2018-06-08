@@ -6,7 +6,7 @@ class Video {
     var id: String
     
     private var item: YTPlaylistItem
-    var record: CKRecord?
+    var userData: CKRecord?
     
     init(item: YTPlaylistItem) {
         self.id = item.snippet.resourceId.videoId
@@ -22,12 +22,12 @@ class Video {
     }
     
     var progress: Double {
-        get { return record?["progress"] as? Double ?? 0 }
+        get { return userData?["progress"] as? Double ?? 0 }
         set {
-            let updatedRecord = record ?? CKRecord(recordType: "Video", recordID: CKRecordID(recordName: id))
-            updatedRecord["progress"] = newValue as CKRecordValue
-            UserData.sync(updatedRecord)
-            record = updatedRecord
+            let record = userData ?? CKRecord(recordType: "VideoUserData", recordID: CKRecordID(recordName: id))
+            record["progress"] = newValue as CKRecordValue
+            UserData.save(record)
+            userData = record
         }
     }
     

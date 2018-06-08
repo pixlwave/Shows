@@ -13,10 +13,10 @@ class YouTube {
         return decoder
     }()
     
-    static var subscriptions = [YTChannelItem]()
+    static var subscriptions = [Channel]()
     
     static func loadSubscriptions() {
-        subscriptions = [YTChannelItem]()
+        subscriptions = [Channel]()
         let group = DispatchGroup()
         
         for id in UserData.subscriptionIDs {
@@ -32,9 +32,9 @@ class YouTube {
     static func reload() {
         let group = DispatchGroup()
         
-        for show in subscriptions {
+        for channel in subscriptions {
             group.enter()
-            reloadPlaylistItems(for: show) { group.leave() }
+            channel.reloadPlaylistItems { group.leave() }
         }
         
         group.notify(queue: DispatchQueue.main, work: DispatchWorkItem(block: {
@@ -43,9 +43,9 @@ class YouTube {
     }
     
     static func search(for query: String, completionHandler: @escaping ([YTSearchResult]) -> Void) {
-        guard let url = URL(string: "https://www.googleapis.com/youtube/v3/search?part=snippet&q=\(query)&type=channel&maxResults=15&key=\(key)") else { completionHandler([YTSearchResult]()); return }
+        guard let url = channelSearchURL(for: query) else { completionHandler([YTSearchResult]()); return }
         
-        let task = session.dataTask(with: url) { data, response, error in
+        queryAPI(with: url) { data, response, error in
             if let data = data {
                 do {
                     let searchList = try jsonDecoder.decode(YTSearchListResonse.self, from: data)
@@ -56,21 +56,20 @@ class YouTube {
                 }
             }
         }
-        
-        task.resume()
     }
     
     static func subscribe(to id: String, completionHandler: @escaping () -> Void) {
-        guard let url = URL(string: "https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails&id=\(id)&key=\(key)") else { completionHandler(); return }
+        guard let url = channelItemListURL(for: id) else { completionHandler(); return }
         
-        let task = session.dataTask(with: url) { (data, response, error) in
+        queryAPI(with: url) { (data, response, error) in
             if let data = data {
                 do {
                     let channelList = try jsonDecoder.decode(YTChannelListResponse.self, from: data)
                     guard let channelItem = channelList.items.first else { completionHandler(); return }
-                    subscriptions.append(channelItem)
-                    UserData.addSubscription(to: id)    // FIXME: This gets called on initial load. Needs getChannel()
-                    reloadPlaylistItems(for: channelItem, completionHandler: completionHandler)
+                    let channel = Channel(item: channelItem)
+                    subscriptions.append(channel)
+                    UserData.saveSubscription(to: id)    // FIXME: This gets called on initial load. Needs getChannel()
+                    channel.reloadPlaylistItems(completionHandler: completionHandler)
                 } catch {
                     print("Error \(error)")
                     completionHandler()
@@ -79,30 +78,26 @@ class YouTube {
                 completionHandler()
             }
         }
-        
-        task.resume()
     }
     
-    static func reloadSubscriptionInfo() {
-        // TODO: Implement this
+    static func channelSearchURL(for query: String) -> URL? {
+        return URL(string: "https://www.googleapis.com/youtube/v3/search?part=snippet&q=\(query)&type=channel&maxResults=15&key=\(key)")
     }
     
-    static func reloadPlaylistItems(for channel: YTChannelItem, completionHandler: @escaping () -> Void) {
-        guard let url = URL(string: "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=\(channel.playlistID)&maxResults=50&key=\(key)") else { completionHandler(); return }
-        
-        let task = session.dataTask(with: url) { (data, response, error) in
-            if let data = data {
-                do {
-                    let playlistItemList = try jsonDecoder.decode(YTPlaylistItemListResponse.self, from: data)
-                    channel.videos = playlistItemList.items.map { Video(item: $0) }     // FIXME: this erases user data
-                } catch {
-                    print("Error \(error)")
-                }
-            }
-            completionHandler()
-        }
-            
-        task.resume()
+    static func channelItemListURL(for channelID: String) -> URL? {
+        return URL(string: "https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails&id=\(channelID)&key=\(key)")
+    }
+    
+    static func playlistItemListURL(for playlistID: String) -> URL? {
+        return URL(string: "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=\(playlistID)&maxResults=50&key=\(key)")
+    }
+    
+    static func queryAPI(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
+        session.dataTask(with: url, completionHandler: completionHandler).resume()
+    }
+    
+    static func decode<T>(_ type: T.Type, from data: Data) throws -> T where T : Decodable {
+        return try jsonDecoder.decode(type, from: data)
     }
     
     static func sortSubscriptions() {
