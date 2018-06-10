@@ -13,10 +13,15 @@ class ShowController: UICollectionViewController {
         collectionView?.refreshControl = refreshControl
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .showUpdated, object: nil)
+        collectionView?.invalidateIntrinsicContentSize()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         navigationItem.title = show?.name
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        (collectionView?.collectionViewLayout as? UICollectionViewFlowLayout)?.invalidateLayout()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -24,7 +29,7 @@ class ShowController: UICollectionViewController {
             guard let destVC = segue.destination as? PlayerController else { return }
             guard let tappedCell = sender as? VideoCell else { return }
             guard let videoIndex = collectionView?.indexPath(for: tappedCell)?.row else { return }
-            guard let video = show?.videos[videoIndex] else { return }
+            guard let video = show?.playlist[videoIndex] else { return }
             destVC.video = video
         }
     }
@@ -44,7 +49,7 @@ class ShowController: UICollectionViewController {
         if sender.state == .began {
             let tapLocation = sender.location(in: collectionView)
             guard let indexPath = collectionView?.indexPathForItem(at: tapLocation) else { return }
-            guard let video = show?.videos[indexPath.row] else { return }
+            guard let video = show?.playlist[indexPath.row] else { return }
             let cell = self.collectionView?.cellForItem(at: indexPath) as? VideoCell
 
             let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -82,11 +87,11 @@ class ShowController: UICollectionViewController {
 extension ShowController {
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return show?.videos.count ?? 0
+        return show?.playlist.count ?? 0
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let video = show?.videos[indexPath.row] else { return UICollectionViewCell() }
+        guard let video = show?.playlist[indexPath.row] else { return UICollectionViewCell() }
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoCell", for: indexPath) as? VideoCell ?? VideoCell()
         cell.titleLabel.text = video.title
         cell.thumbnailImageView.image = nil
@@ -103,11 +108,19 @@ extension ShowController {
 }
 
 
-// MARK: UICollectionViewControllerDelegate
-extension ShowController {
-    
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //
+// MARK: UICollectionViewDelegateFlowLayout
+extension ShowController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        guard let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout else { return
+            CGSize(width: 295, height: 95)
+        }
+        
+        // FIXME: just compute this once until view size changes?
+        let limit: CGFloat = 275
+        let width = collectionView.safeAreaLayoutGuide.layoutFrame.width
+        let numberOfColumns = (width / limit).rounded(.down)
+        var cellWidth = (width / numberOfColumns) - (flowLayout.sectionInset.left + flowLayout.sectionInset.right)
+        if numberOfColumns > 1 { cellWidth -= flowLayout.minimumInteritemSpacing }
+        return CGSize(width: cellWidth, height: (cellWidth / 32 * 9).rounded())
     }
-    
 }

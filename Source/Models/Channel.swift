@@ -17,8 +17,8 @@ class Channel {
     var thumbnailURL: URL? { return URL(string: item.snippet.thumbnails.medium.url)}
     var playlistID: String { return item.contentDetails.relatedPlaylists.uploads }
     
-    var videos = [Video]()
-    var nextVideo: Video? { return videos.filter { $0.progress <= 0 }.first }
+    var playlist = [Video]()
+    var nextVideo: Video? { return playlist.filter { $0.progress <= 0 }.first }
     
     func reloadPlaylistItems(completionHandler: @escaping () -> Void) {
         guard let url = YouTube.playlistItemListURL(for: playlistID) else { completionHandler(); return }
@@ -27,7 +27,7 @@ class Channel {
             if let data = data {
                 do {
                     let playlistItemList = try YouTube.decode(YTPlaylistItemListResponse.self, from: data)
-                    self.videos = playlistItemList.items.map { Video(item: $0) }
+                    self.playlist = playlistItemList.items.map { Video(item: $0) }
                     self.refreshUserData()
                 } catch {
                     print("Error \(error)")
@@ -39,11 +39,11 @@ class Channel {
     
     func refreshUserData() {
         // download latest cloudkit records and attach to videos
-        let recordIDs = self.videos.map { CKRecordID(recordName: $0.id) }
+        let recordIDs = self.playlist.map { CKRecordID(recordName: $0.id) }
         let operation = CKFetchRecordsOperation(recordIDs: recordIDs)
         operation.fetchRecordsCompletionBlock = { results, error in
             guard let results = results else { print("Fetch Error"); return }
-            for video in self.videos {
+            for video in self.playlist {
                 let record = results.first(where: { $0.key.recordName == video.id })?.value ?? CKRecord(recordType: "VideoUserData", recordID: CKRecordID(recordName: video.id))
                 video.userData = record
             }
