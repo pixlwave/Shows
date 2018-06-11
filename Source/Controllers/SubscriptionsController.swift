@@ -17,15 +17,8 @@ class SubscriptionsController: UICollectionViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .subsUpdated, object: nil)
     }
     
-    @objc func refreshSubscriptions() {
-        DispatchQueue.global(qos: .userInitiated).async {
-            YouTube.reload()
-        }
-    }
-    
-    @objc func reloadData() {
-        collectionView?.reloadData()
-        refreshControl.endRefreshing()
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        (collectionView?.collectionViewLayout as? UICollectionViewFlowLayout)?.invalidateLayout()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -35,6 +28,17 @@ class SubscriptionsController: UICollectionViewController {
             guard let channelIndex = collectionView?.indexPath(for: tappedCell)?.row else { return }
             destVC.show = YouTube.subscriptions[channelIndex]
         }
+    }
+    
+    @objc func refreshSubscriptions() {
+        DispatchQueue.global(qos: .userInitiated).async {
+            YouTube.reload()
+        }
+    }
+    
+    @objc func reloadData() {
+        collectionView?.reloadData()
+        refreshControl.endRefreshing()
     }
 
 }
@@ -63,11 +67,19 @@ extension SubscriptionsController {
 }
 
 
-// MARK: UICollectionViewDelegate
-extension SubscriptionsController {
-    
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //
+// MARK: UICollectionViewDelegateFlowLayout
+extension SubscriptionsController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        guard let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout else { return
+            CGSize(width: 100, height: 110)
+        }
+        
+        // FIXME: just compute this once until view size changes?
+        let limit: CGFloat = 100
+        let width = collectionView.safeAreaLayoutGuide.layoutFrame.width
+        let numberOfColumns = (width / limit).rounded(.down)
+        var cellWidth = (width / numberOfColumns) - (flowLayout.sectionInset.left + flowLayout.sectionInset.right)
+        if numberOfColumns > 1 { cellWidth -= flowLayout.minimumInteritemSpacing }
+        return CGSize(width: cellWidth, height: cellWidth * 1.1)
     }
-    
 }
