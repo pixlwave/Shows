@@ -45,7 +45,7 @@ class ShowController: UICollectionViewController {
         refreshControl.endRefreshing()
     }
     
-    @IBAction func showVideoOptions(_ sender: UIGestureRecognizer) {
+    @IBAction func presentVideoOptions(_ sender: UIGestureRecognizer) {
         if sender.state == .began {
             let tapLocation = sender.location(in: collectionView)
             guard let indexPath = collectionView?.indexPathForItem(at: tapLocation) else { return }

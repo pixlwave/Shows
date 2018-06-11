@@ -25,6 +25,13 @@ class UserData {
         save(subscriptionsRecord)
     }
     
+    static func deleteSubscription(to channelID: String) {
+        subscriptionIDs.remove(channelID)
+        subscriptionsRecord["subscriptionIDs"] = Array(subscriptionIDs) as CKRecordValue
+        
+        save(subscriptionsRecord)
+    }
+    
     static func save(_ record: CKRecord) {
         let operation = CKModifyRecordsOperation(recordsToSave: [record], recordIDsToDelete: nil)
         userDB.add(operation)

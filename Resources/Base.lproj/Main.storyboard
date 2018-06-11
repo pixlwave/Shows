@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="H7i-QD-1Fw">
-    <device id="retina4_0" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -16,9 +12,10 @@
             <objects>
                 <collectionViewController id="vi7-UG-Qkz" customClass="SubscriptionsController" customModule="Shows" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="E8P-g3-eGH">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="0.0" sectionInsetReference="safeArea" id="j9Y-HL-865">
                             <size key="itemSize" width="100" height="110"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -66,6 +63,7 @@
                         <connections>
                             <outlet property="dataSource" destination="vi7-UG-Qkz" id="cpl-US-wXp"/>
                             <outlet property="delegate" destination="vi7-UG-Qkz" id="uxt-lD-RcY"/>
+                            <outletCollection property="gestureRecognizers" destination="5v7-Sc-aYP" appends="YES" id="eQN-ZT-Gtc"/>
                         </connections>
                     </collectionView>
                     <navigationItem key="navigationItem" title="Shows" id="O5W-8Q-RSP">
@@ -77,6 +75,11 @@
                     </navigationItem>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wib-13-Pk5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="5v7-Sc-aYP">
+                    <connections>
+                        <action selector="presentChannelOptions:" destination="vi7-UG-Qkz" id="Lvs-TR-sSM"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="901.875" y="90.845070422535215"/>
         </scene>
@@ -85,7 +88,7 @@
             <objects>
                 <collectionViewController id="pwd-LK-XxZ" customClass="ShowSearchController" customModule="Shows" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="GNE-mR-0Ud">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="oDL-aD-9PI">
@@ -96,7 +99,7 @@
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SearchResultCell" id="yd0-Lf-vB5" customClass="SearchResultCell" customModule="Shows" customModuleProvider="target">
-                                <rect key="frame" x="46" y="0.0" width="228" height="118"/>
+                                <rect key="frame" x="0.0" y="0.0" width="228" height="118"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                     <rect key="frame" x="0.0" y="0.0" width="228" height="118"/>
@@ -156,7 +159,7 @@
             <objects>
                 <collectionViewController id="P26-Qz-82N" customClass="ShowController" customModule="Shows" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="aDD-Ly-3TS">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" sectionInsetReference="safeArea" id="E9v-B2-vsw">
@@ -167,7 +170,7 @@
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="VideoCell" id="dKq-H1-ncD" customClass="VideoCell" customModule="Shows" customModuleProvider="target">
-                                <rect key="frame" x="5" y="5" width="310" height="87"/>
+                                <rect key="frame" x="145" y="5" width="310" height="87"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                     <rect key="frame" x="0.0" y="0.0" width="310" height="87"/>
@@ -237,7 +240,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B2t-d3-I6f" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="ofs-hs-4Wc">
                     <connections>
-                        <action selector="showVideoOptions:" destination="P26-Qz-82N" id="ORv-IB-iZo"/>
+                        <action selector="presentVideoOptions:" destination="P26-Qz-82N" id="ORv-IB-iZo"/>
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
@@ -248,11 +251,11 @@
             <objects>
                 <viewController id="rMw-zH-dT7" customClass="PlayerController" customModule="Shows" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Dy1-Ou-aJ7">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="5ye-S6-iXU">
-                                <rect key="frame" x="142" y="298" width="37" height="37"/>
+                                <rect key="frame" x="281.5" y="313.5" width="37" height="37"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>

@@ -80,6 +80,11 @@ class YouTube {
         }
     }
     
+    static func unsubscribe(from id: String) {
+        subscriptions = subscriptions.filter {$0.id != id }
+        UserData.deleteSubscription(to: id)
+    }
+    
     static func channelSearchURL(for query: String) -> URL? {
         return URL(string: "https://www.googleapis.com/youtube/v3/search?part=snippet&q=\(query)&type=channel&maxResults=15&key=\(key)")
     }

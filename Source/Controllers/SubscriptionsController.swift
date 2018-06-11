@@ -41,6 +41,44 @@ class SubscriptionsController: UICollectionViewController {
         refreshControl.endRefreshing()
     }
 
+    @IBAction func presentChannelOptions(_ sender: UILongPressGestureRecognizer) {
+        if sender.state == .began {
+            let tapLocation = sender.location(in: collectionView)
+            guard let indexPath = collectionView?.indexPathForItem(at: tapLocation) else { return }
+            let channel = YouTube.subscriptions[indexPath.row]
+            let cell = self.collectionView?.cellForItem(at: indexPath) as? VideoCell
+            
+            let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            let watchedAction = UIAlertAction(title: "Mark all as watched", style: .default) { action in
+                // TODO: Implement this
+            }
+            actionSheet.addAction(watchedAction)
+            
+            let shareAction = UIAlertAction(title: "Share", style: .default) { action in
+                guard let shareURL = URL(string: "https://youtube.com/channel\(channel.id)") else { return }
+                let shareSheet = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+                shareSheet.popoverPresentationController?.sourceView = cell
+                shareSheet.popoverPresentationController?.sourceRect = cell?.bounds ?? .zero
+                shareSheet.popoverPresentationController?.permittedArrowDirections = [.up, .down]
+                self.present(shareSheet, animated: true)
+            }
+            actionSheet.addAction(shareAction)
+            
+            let unsubscribeAction = UIAlertAction(title: "Unsubscribe", style: .destructive) { action in
+                YouTube.unsubscribe(from: channel.id)
+                self.collectionView?.deleteItems(at: [indexPath])
+            }
+            actionSheet.addAction(unsubscribeAction)
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+            actionSheet.addAction(cancelAction)
+            
+            actionSheet.popoverPresentationController?.sourceView = cell
+            actionSheet.popoverPresentationController?.sourceRect = cell?.bounds ?? .zero
+            actionSheet.popoverPresentationController?.permittedArrowDirections = [.up, .down]
+            present(actionSheet, animated: true)
+        }
+    }
 }
 
 
