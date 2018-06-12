@@ -86,15 +86,48 @@ class YouTube {
     }
     
     static func channelSearchURL(for query: String) -> URL? {
-        return URL(string: "https://www.googleapis.com/youtube/v3/search?part=snippet&q=\(query)&type=channel&maxResults=15&key=\(key)")
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = "www.googleapis.com"
+        urlComponents.path = "/youtube/v3/search"
+        urlComponents.queryItems = [
+            URLQueryItem(name: "part", value: "snippet"),
+            URLQueryItem(name: "q", value: query),
+            URLQueryItem(name: "type", value: "channel"),
+            URLQueryItem(name: "maxResults", value: "15"),
+            URLQueryItem(name: "key", value: key)
+        ]
+        
+        return urlComponents.url
     }
     
     static func channelItemListURL(for channelID: String) -> URL? {
-        return URL(string: "https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails&id=\(channelID)&key=\(key)")
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = "www.googleapis.com"
+        urlComponents.path = "/youtube/v3/channels"
+        urlComponents.queryItems = [
+            URLQueryItem(name: "part", value: "snippet,contentDetails"),
+            URLQueryItem(name: "id", value: channelID),
+            URLQueryItem(name: "key", value: key)
+        ]
+        
+        return urlComponents.url
     }
     
     static func playlistItemListURL(for playlistID: String) -> URL? {
-        return URL(string: "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=\(playlistID)&maxResults=50&key=\(key)")
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = "www.googleapis.com"
+        urlComponents.path = "/youtube/v3/playlistItems"
+        urlComponents.queryItems = [
+            URLQueryItem(name: "part", value: "snippet"),
+            URLQueryItem(name: "playlistId", value: playlistID),
+            URLQueryItem(name: "maxResults", value: "50"),
+            URLQueryItem(name: "key", value: key)
+        ]
+        
+        return urlComponents.url
     }
     
     static func queryAPI(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
