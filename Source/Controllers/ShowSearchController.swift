@@ -17,19 +17,6 @@ class ShowSearchController: UICollectionViewController {
         definesPresentationContext = true
     }
     
-    @IBAction func subscribeToShow(_ sender: UIButton) {
-        guard let cell = sender.superview?.superview as? SearchResultCell else { return }
-        guard let indexPath = collectionView?.indexPath(for: cell) else { return }
-        let searchResult = results[indexPath.row]
-        guard !searchResult.subscribed else { return }
-        
-        YouTube.subscribe(to: searchResult.snippet.channelId) {
-            DispatchQueue.main.async {
-                sender.setTitle(searchResult.subscribed ? "Subscribed" : "Subscribe", for: .normal)
-                YouTube.sortSubscriptions()
-            }
-        }
-    }
 }
 
 
@@ -46,16 +33,41 @@ extension ShowSearchController {
         let video = results[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SearchResultCell", for: indexPath) as? SearchResultCell ?? SearchResultCell()
         cell.nameLabel.text = video.name
+        cell.subscriptionStatusLabel.text = video.subscribed ? "Subscribed" : "Subscribe"
         cell.thumbnailImageView.image = nil
 
         if let url = video.thumbnailURL {
             cell.thumbnailImageView.load(from: url)
         }
         
-        let subscribeButtonTitle = video.subscribed ? "Subscribed" : "Subscribe"
-        cell.subscribeButton.setTitle(subscribeButtonTitle, for: .normal)
-        
         return cell
+    }
+    
+}
+
+
+// MARK: UICollectionViewDelegate
+extension ShowSearchController {
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? SearchResultCell else { return }
+        let searchResult = results[indexPath.row]
+        cell.backgroundColor = UIColor(white: 0.97, alpha: 1.0)
+        
+        if !searchResult.subscribed {
+            YouTube.subscribe(to: searchResult.snippet.channelId) {
+                DispatchQueue.main.async {
+                    cell.subscriptionStatusLabel.text = searchResult.subscribed ? "Subscribed" : "Subscribe"
+                    UIView.animate(withDuration: 0.1) { cell.backgroundColor = UIColor.clear }
+                    YouTube.sortSubscriptions()
+                }
+            }
+        } else {
+            YouTube.unsubscribe(from: searchResult.snippet.channelId)
+            cell.subscriptionStatusLabel.text = searchResult.subscribed ? "Subscribed" : "Subscribe"
+            UIView.animate(withDuration: 0.1) { cell.backgroundColor = UIColor.clear }
+            NotificationCenter.default.post(Notification(name: .subsUpdated))
+        }
     }
     
 }
