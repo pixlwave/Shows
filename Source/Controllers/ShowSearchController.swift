@@ -80,6 +80,7 @@ extension ShowSearchController: UISearchBarDelegate {
             DispatchQueue.main.async {
                 self.results = results
                 self.collectionView?.reloadData()
+                self.collectionView?.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
             }
         }
     }

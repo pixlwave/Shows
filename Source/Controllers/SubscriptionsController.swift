@@ -109,7 +109,7 @@ extension SubscriptionsController {
 extension SubscriptionsController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         guard let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout else { return
-            CGSize(width: 100, height: 110)
+            CGSize(width: 100, height: 115)
         }
         
         // FIXME: just compute this once until view size changes?
@@ -118,6 +118,6 @@ extension SubscriptionsController: UICollectionViewDelegateFlowLayout {
         let numberOfColumns = (width / limit).rounded(.down)
         var cellWidth = (width / numberOfColumns) - (flowLayout.sectionInset.left + flowLayout.sectionInset.right)
         if numberOfColumns > 1 { cellWidth -= flowLayout.minimumInteritemSpacing }
-        return CGSize(width: cellWidth, height: cellWidth * 1.1)
+        return CGSize(width: cellWidth, height: cellWidth * 1.15)
     }
 }
