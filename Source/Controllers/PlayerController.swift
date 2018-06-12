@@ -4,6 +4,7 @@ import WebKit
 class PlayerController: UIViewController {
     
     var video: Video?
+    weak var videoCell: VideoCell?
     
     @IBOutlet weak var videoLoadingIndicator: UIActivityIndicatorView!
     
@@ -46,7 +47,9 @@ class PlayerController: UIViewController {
     
     @objc func videoPausedWithProgress(notification: Notification) {
         guard let progress = notification.userInfo?["progress"] as? Double else { return }
-        video?.progress = progress
+        guard let video = video else { return }
+        video.progress = progress
+        videoCell?.watchedLabel.isHidden = video.progress <= 0
     }
     
     @IBAction func shareVideo(_ sender: UIBarButtonItem) {

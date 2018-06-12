@@ -31,6 +31,7 @@ class ShowController: UICollectionViewController {
             guard let videoIndex = collectionView?.indexPath(for: tappedCell)?.row else { return }
             guard let video = show?.playlist[videoIndex] else { return }
             destVC.video = video
+            destVC.videoCell = tappedCell
         }
     }
     
