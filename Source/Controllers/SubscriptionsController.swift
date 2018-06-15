@@ -46,7 +46,7 @@ class SubscriptionsController: UICollectionViewController {
             let tapLocation = sender.location(in: collectionView)
             guard let indexPath = collectionView?.indexPathForItem(at: tapLocation) else { return }
             let channel = YouTube.subscriptions[indexPath.row]
-            let cell = self.collectionView?.cellForItem(at: indexPath) as? VideoCell
+            guard let cell = self.collectionView?.cellForItem(at: indexPath) as? ShowCell else { return }
             
             let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
             let watchedAction = UIAlertAction(title: "Mark all as watched", style: .default) { action in
@@ -58,7 +58,7 @@ class SubscriptionsController: UICollectionViewController {
                 guard let shareURL = URL(string: "https://youtube.com/channel/\(channel.id)") else { return }
                 let shareSheet = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
                 shareSheet.popoverPresentationController?.sourceView = cell
-                shareSheet.popoverPresentationController?.sourceRect = cell?.bounds ?? .zero
+                shareSheet.popoverPresentationController?.sourceRect = cell.bounds
                 shareSheet.popoverPresentationController?.permittedArrowDirections = [.up, .down]
                 self.present(shareSheet, animated: true)
             }
@@ -74,7 +74,7 @@ class SubscriptionsController: UICollectionViewController {
             actionSheet.addAction(cancelAction)
             
             actionSheet.popoverPresentationController?.sourceView = cell
-            actionSheet.popoverPresentationController?.sourceRect = cell?.bounds ?? .zero
+            actionSheet.popoverPresentationController?.sourceRect = cell.bounds
             actionSheet.popoverPresentationController?.permittedArrowDirections = [.up, .down]
             present(actionSheet, animated: true)
         }
