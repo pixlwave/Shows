@@ -26,7 +26,6 @@ struct YTThumbnails: Codable {
             case height
         }
         
-        // FIXME: `= nil` added for Swift 4.0 bug
-        var image: UIImage? = nil
+        var image: UIImage?
     }
 }

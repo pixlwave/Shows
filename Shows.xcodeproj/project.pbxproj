@@ -208,7 +208,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = pixlwave;
 				TargetAttributes = {
 					A531813B20B6E03400EC9282 = {
@@ -265,25 +265,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A531816220B6EC8E00EC9282 /* YTChannelItem.swift in Sources */,
+				A531816A20B6F7CA00EC9282 /* YTPlaylistItem.swift in Sources */,
+				A57F379F20B9E3BC006255F8 /* YTThumbnails.swift in Sources */,
+				A5783FD820C2DB5300DF7417 /* YTSearchResult.swift in Sources */,
 				A531816620B6ED5700EC9282 /* YTPageInfo.swift in Sources */,
-				A52C40FD20B822560017D7AA /* VideoCell.swift in Sources */,
+				A531816420B6ED1000EC9282 /* YTChannelListResponse.swift in Sources */,
+				A531816820B6F74B00EC9282 /* YTPlaylistItemListResponse.swift in Sources */,
 				A51F1A5820C2A34000D3284C /* YTSearchListResponse.swift in Sources */,
+				A52C40FD20B822560017D7AA /* VideoCell.swift in Sources */,
 				A5A14F9220B72D350089FD4C /* ShowCell.swift in Sources */,
 				A531814220B6E03400EC9282 /* SubscriptionsController.swift in Sources */,
-				A531816420B6ED1000EC9282 /* YTChannelListResponse.swift in Sources */,
-				A531816A20B6F7CA00EC9282 /* YTPlaylistItem.swift in Sources */,
 				A51F1A5A20C2A8FF00D3284C /* ShowSearchController.swift in Sources */,
 				A531815B20B6E64E00EC9282 /* YouTube.swift in Sources */,
-				A5783FD820C2DB5300DF7417 /* YTSearchResult.swift in Sources */,
 				A52C40FF20B823430017D7AA /* ShowController.swift in Sources */,
 				A59D5F6220C2C54800657998 /* SearchResultCell.swift in Sources */,
-				A531816820B6F74B00EC9282 /* YTPlaylistItemListResponse.swift in Sources */,
 				A537747420CB35AE003131F0 /* Channel.swift in Sources */,
 				A50161A220B815F90060E96A /* MaskedImageView.swift in Sources */,
 				A56CA4E520BB310B000C38A4 /* UserData.swift in Sources */,
-				A57F379F20B9E3BC006255F8 /* YTThumbnails.swift in Sources */,
 				A5A14F9020B72AED0089FD4C /* Extends.swift in Sources */,
-				A531816220B6EC8E00EC9282 /* YTChannelItem.swift in Sources */,
 				A5680E7820BF2C2B00BF9C11 /* PlayerController.swift in Sources */,
 				A537745D20CB0912003131F0 /* Video.swift in Sources */,
 				A531814020B6E03400EC9282 /* AppDelegate.swift in Sources */,
@@ -326,6 +326,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -333,6 +334,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -383,6 +385,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -390,6 +393,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -430,6 +434,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = uk.pixlwave.Shows;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
