@@ -38,12 +38,12 @@ class Channel {
     
     func refreshUserData() {
         // download latest cloudkit records and attach to videos
-        let recordIDs = self.playlist.map { CKRecordID(recordName: $0.id) }
+        let recordIDs = self.playlist.map { CKRecord.ID(recordName: $0.id) }
         let operation = CKFetchRecordsOperation(recordIDs: recordIDs)
         operation.fetchRecordsCompletionBlock = { results, error in
             guard let results = results else { print("Fetch Error"); return }
             for video in self.playlist {
-                let record = results.first(where: { $0.key.recordName == video.id })?.value ?? CKRecord(recordType: "VideoUserData", recordID: CKRecordID(recordName: video.id))
+                let record = results.first(where: { $0.key.recordName == video.id })?.value ?? CKRecord(recordType: "VideoUserData", recordID: CKRecord.ID(recordName: video.id))
                 video.userData = record
             }
             DispatchQueue.main.async { NotificationCenter.default.post(Notification(name: .showUpdated)) }

@@ -6,7 +6,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         application.registerForRemoteNotifications()
         UserData.reloadSubscriptions()
         UserData.listenForChanges()
@@ -16,10 +16,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         print("Notification received")
-        let cloudNotification = CKNotification(fromRemoteNotificationDictionary: userInfo)
-        if cloudNotification.notificationType == .query {
-            if cloudNotification.title == "YouTubeChannel" { UserData.reloadSubscriptions() }
+        guard
+            let cloudNotification = CKNotification(fromRemoteNotificationDictionary: userInfo),
+            cloudNotification.notificationType == .query,
+            cloudNotification.title == "YouTubeChannel"
+            else {
+                return
         }
+        
+        UserData.reloadSubscriptions()
+        #warning("Completion handler?!!")
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {

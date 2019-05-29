@@ -5,10 +5,10 @@ class UserData {
     static var subscriptionIDs = Set<String>()
     
     private static var userDB = CKContainer.default().privateCloudDatabase
-    private static let subscriptionsRecordID = CKRecordID(recordName: "Subscriptions")
+    private static let subscriptionsRecordID = CKRecord.ID(recordName: "Subscriptions")
     private static var subscriptionsRecord = CKRecord(recordType: "Subscriptions", recordID: subscriptionsRecordID)
     private static let notificationSubscription = CKQuerySubscription(recordType: "Subscriptions", predicate: NSPredicate(value: true), options: [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion])
-    private static let notificationInfo = CKNotificationInfo()
+    private static let notificationInfo = CKSubscription.NotificationInfo()
     
     static func listenForChanges() {
         notificationInfo.shouldSendContentAvailable = true
