@@ -21,8 +21,7 @@ struct ChannelSearchResult: Codable {
     var name: String { return author }
     var subscribed: Bool { return Invidious.subscriptions.contains { $0.id == authorId } }
     var thumbnailURL: URL? {
-        #warning("Pick a better sized thumbnail")
-        let thumbnail = authorThumbnails.sorted { $0.width > $1.width }.first
+        let thumbnail = authorThumbnails.filter { $0.width > 200 }.sorted { $0.width < $1.width }.first
         return URL(string: thumbnail?.url ?? "")
     }
 }

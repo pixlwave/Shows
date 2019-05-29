@@ -35,7 +35,7 @@ extension SearchController {
         cell.nameLabel.text = video.name
         cell.subscriptionStatusLabel.text = video.subscribed ? "Subscribed" : "Subscribe"
         cell.thumbnailImageView.image = nil
-
+        
         if let url = video.thumbnailURL {
             cell.thumbnailImageView.load(from: url)
         }

@@ -26,8 +26,7 @@ struct VideoResult: Codable {
     }
     
     var thumbnailURL: URL? {
-        #warning("Pick a better sized thumbnail")
-        let thumbnail = videoThumbnails.sorted { $0.width > $1.width }.first
+        let thumbnail = videoThumbnails.filter { $0.width > 200 }.sorted { $0.width < $1.width }.first
         return URL(string: thumbnail?.url ?? "")
     }
 }
