@@ -23,11 +23,11 @@ class UserData {
     
     static func reloadSubscriptions() {
         userDB.fetch(withRecordID: subscriptionsRecordID) { record, error in
-            guard let record = record else { print("Subscription Fetch Error"); return }
+            guard let record = record else { print("Subscription Fetch Error: \(error)"); return }
             subscriptionIDs = Set<String>(record["subscriptionIDs"] as? [String] ?? [String]())
             subscriptionsRecord = record
             
-            YouTube.loadSubscriptions()
+            Invidious.loadSubscriptions()
         }
     }
     

@@ -1,8 +1,7 @@
 import Foundation
 
-class YouTube {
+class Invidious {
     
-    private static let key = try! String(contentsOf: Bundle.main.url(forResource: "Key", withExtension: nil)!)
     private static let session = URLSession.shared
     private static let jsonDecoder: JSONDecoder = {
         let decoder = JSONDecoder()
@@ -21,7 +20,8 @@ class YouTube {
         
         for id in UserData.subscriptionIDs {
             group.enter()
-            subscribe(to: id) { group.leave() }
+            #warning("Implement this")
+            // subscribe(to: id) { group.leave() }
         }
         
         group.notify(queue: DispatchQueue.main, work: DispatchWorkItem(block: {
@@ -42,60 +42,42 @@ class YouTube {
         }))
     }
     
-    static func search(for query: String, completionHandler: @escaping ([YTSearchResult]) -> Void) {
-        guard let url = channelSearchURL(for: query) else { completionHandler([YTSearchResult]()); return }
+    static func search(for query: String, completionHandler: @escaping ([ChannelSearchResult]) -> Void) {
+        guard let url = channelSearchURL(for: query) else { completionHandler([ChannelSearchResult]()); return }
         
         queryAPI(with: url) { data, response, error in
             if let data = data {
                 do {
-                    let searchList = try jsonDecoder.decode(YTSearchListResonse.self, from: data)
-                    completionHandler(searchList.items)
+                    let searchList = try jsonDecoder.decode([ChannelSearchResult].self, from: data)
+                    completionHandler(searchList)
                 } catch {
                     print("Error \(error)")
-                    completionHandler([YTSearchResult]())
+                    completionHandler([ChannelSearchResult]())
                 }
             }
         }
     }
     
-    static func subscribe(to id: String, completionHandler: @escaping () -> Void) {
-        guard let url = channelItemListURL(for: id) else { completionHandler(); return }
-        
-        queryAPI(with: url) { (data, response, error) in
-            if let data = data {
-                do {
-                    let channelList = try jsonDecoder.decode(YTChannelListResponse.self, from: data)
-                    guard let channelItem = channelList.items.first else { completionHandler(); return }
-                    let channel = Channel(item: channelItem)
-                    subscriptions.append(channel)
-                    UserData.saveSubscription(to: id)    // FIXME: This gets called on initial load. Needs getChannel()
-                    channel.reloadPlaylistItems(completionHandler: completionHandler)
-                } catch {
-                    print("Error \(error)")
-                    completionHandler()
-                }
-            } else {
-                completionHandler()
-            }
-        }
+    static func subscribe(to searchResult: ChannelSearchResult, completionHandler: @escaping () -> Void) {
+        let channel = Channel(result: searchResult)
+        subscriptions.append(channel)
+        UserData.saveSubscription(to: searchResult.authorId)    // FIXME: This gets called on initial load. Needs getChannel()
+        channel.reloadPlaylistItems(completionHandler: completionHandler)
     }
     
-    static func unsubscribe(from id: String) {
-        subscriptions = subscriptions.filter {$0.id != id }
-        UserData.deleteSubscription(to: id)
+    static func unsubscribe(from searchResult: ChannelSearchResult) {
+        subscriptions = subscriptions.filter {$0.id != searchResult.authorId }
+        UserData.deleteSubscription(to: searchResult.authorId)
     }
     
     static func channelSearchURL(for query: String) -> URL? {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
-        urlComponents.host = "www.googleapis.com"
-        urlComponents.path = "/youtube/v3/search"
+        urlComponents.host = "invidio.us"
+        urlComponents.path = "/api/v1/search"
         urlComponents.queryItems = [
-            URLQueryItem(name: "part", value: "snippet"),
             URLQueryItem(name: "q", value: query),
             URLQueryItem(name: "type", value: "channel"),
-            URLQueryItem(name: "maxResults", value: "15"),
-            URLQueryItem(name: "key", value: key)
         ]
         
         return urlComponents.url
@@ -104,12 +86,10 @@ class YouTube {
     static func channelItemListURL(for channelID: String) -> URL? {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
-        urlComponents.host = "www.googleapis.com"
-        urlComponents.path = "/youtube/v3/channels"
+        urlComponents.host = "invidio.us"
+        urlComponents.path = "/api/v1/channels/\(channelID)"
         urlComponents.queryItems = [
-            URLQueryItem(name: "part", value: "snippet,contentDetails"),
-            URLQueryItem(name: "id", value: channelID),
-            URLQueryItem(name: "key", value: key)
+            URLQueryItem(name: "sort_by", value: "newest")
         ]
         
         return urlComponents.url
@@ -118,13 +98,23 @@ class YouTube {
     static func playlistItemListURL(for playlistID: String) -> URL? {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
-        urlComponents.host = "www.googleapis.com"
-        urlComponents.path = "/youtube/v3/playlistItems"
+        urlComponents.host = "invidio.us"
+        urlComponents.path = "/api/v1/playlists/\(playlistID)"
         urlComponents.queryItems = [
-            URLQueryItem(name: "part", value: "snippet"),
-            URLQueryItem(name: "playlistId", value: playlistID),
-            URLQueryItem(name: "maxResults", value: "50"),
-            URLQueryItem(name: "key", value: key)
+            URLQueryItem(name: "page", value: "0")
+        ]
+        
+        return urlComponents.url
+    }
+    
+    static func channelVideosURL(for channelID: String) -> URL? {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = "invidio.us"
+        urlComponents.path = "/api/v1/channels/\(channelID)/videos"
+        urlComponents.queryItems = [
+            URLQueryItem(name: "page", value: "0"),
+            URLQueryItem(name: "sort_by", value: "newest")
         ]
         
         return urlComponents.url

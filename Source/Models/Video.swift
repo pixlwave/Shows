@@ -5,19 +5,19 @@ class Video {
     
     var id: String
     
-    private var item: YTPlaylistItem
+    private var result: VideoResult
     var userData: CKRecord?
     
-    init(item: YTPlaylistItem) {
-        self.id = item.snippet.resourceId.videoId
-        self.item = item
+    init(result: VideoResult) {
+        self.id = result.videoId
+        self.result = result
     }
     
-    var title: String { return item.snippet.title }
-    var thumbnailURL: URL? { return URL(string: item.snippet.thumbnails.medium.url) }
-    var publishedAt: Date { return item.snippet.publishedAt }
+    var title: String { return result.title }
+    var thumbnailURL: URL? { return result.thumbnailURL }
+    var publishedAt: Date { return Date(timeIntervalSince1970: TimeInterval(result.published)) }
     var publishedString: String {
-        guard let formattedTimeInterval = Formatter.timeInterval.string(from: item.snippet.publishedAt, to: Date()) else { return "" }
+        guard let formattedTimeInterval = Formatter.timeInterval.string(from: publishedAt, to: Date()) else { return "" }
         return formattedTimeInterval + " ago"
     }
     

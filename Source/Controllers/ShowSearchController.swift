@@ -2,7 +2,7 @@ import UIKit
 
 class ShowSearchController: UICollectionViewController {
     
-    var results = [YTSearchResult]()
+    var results = [ChannelSearchResult]()
     let searchController = UISearchController(searchResultsController: nil)
     
     override func viewDidLoad() {
@@ -55,15 +55,15 @@ extension ShowSearchController {
         cell.backgroundColor = UIColor(white: 0.97, alpha: 1.0)
         
         if !searchResult.subscribed {
-            YouTube.subscribe(to: searchResult.snippet.channelId) {
+            Invidious.subscribe(to: searchResult) {
                 DispatchQueue.main.async {
                     cell.subscriptionStatusLabel.text = searchResult.subscribed ? "Subscribed" : "Subscribe"
                     UIView.animate(withDuration: 0.1) { cell.backgroundColor = UIColor.clear }
-                    YouTube.sortSubscriptions()
+                    Invidious.sortSubscriptions()
                 }
             }
         } else {
-            YouTube.unsubscribe(from: searchResult.snippet.channelId)
+            Invidious.unsubscribe(from: searchResult)
             cell.subscriptionStatusLabel.text = searchResult.subscribed ? "Subscribed" : "Subscribe"
             UIView.animate(withDuration: 0.1) { cell.backgroundColor = UIColor.clear }
             NotificationCenter.default.post(Notification(name: .subsUpdated))
@@ -88,7 +88,7 @@ extension ShowSearchController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let query = searchController.searchBar.text, !query.isEmpty else { return }
         
-        YouTube.search(for: query) { results in
+        Invidious.search(for: query) { results in
             DispatchQueue.main.async {
                 self.results = results
                 self.collectionView?.reloadData()

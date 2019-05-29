@@ -26,13 +26,13 @@ class SubscriptionsController: UICollectionViewController {
             guard let destVC = segue.destination as? ShowController else { return }
             guard let tappedCell = sender as? ShowCell else { return }
             guard let channelIndex = collectionView?.indexPath(for: tappedCell)?.row else { return }
-            destVC.show = YouTube.subscriptions[channelIndex]
+            destVC.show = Invidious.subscriptions[channelIndex]
         }
     }
     
     @objc func refreshSubscriptions() {
         DispatchQueue.global(qos: .userInitiated).async {
-            YouTube.reload()
+            Invidious.reload()
         }
     }
     
@@ -45,7 +45,7 @@ class SubscriptionsController: UICollectionViewController {
         if sender.state == .began {
             let tapLocation = sender.location(in: collectionView)
             guard let indexPath = collectionView?.indexPathForItem(at: tapLocation) else { return }
-            let channel = YouTube.subscriptions[indexPath.row]
+            let channel = Invidious.subscriptions[indexPath.row]
             guard let cell = self.collectionView?.cellForItem(at: indexPath) as? ShowCell else { return }
             
             let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -65,7 +65,7 @@ class SubscriptionsController: UICollectionViewController {
             actionSheet.addAction(shareAction)
             
             let unsubscribeAction = UIAlertAction(title: "Unsubscribe", style: .destructive) { action in
-                YouTube.unsubscribe(from: channel.id)
+                Invidious.unsubscribe(from: channel.result)
                 self.collectionView?.deleteItems(at: [indexPath])
             }
             actionSheet.addAction(unsubscribeAction)
@@ -86,11 +86,11 @@ class SubscriptionsController: UICollectionViewController {
 extension SubscriptionsController {
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return YouTube.subscriptions.count
+        return Invidious.subscriptions.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let show = YouTube.subscriptions[indexPath.row]
+        let show = Invidious.subscriptions[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ShowCell", for: indexPath) as? ShowCell ?? ShowCell()
         cell.nameLabel.text = show.name
         cell.thumbnailImageView.image = nil

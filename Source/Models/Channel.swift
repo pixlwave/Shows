@@ -5,29 +5,28 @@ class Channel {
     
     var id: String
     
-    private var item: YTChannelItem
+    var result: ChannelSearchResult
     var userData: CKRecord?
     
-    init(item: YTChannelItem) {
-        self.id = item.id
-        self.item = item
+    init(result: ChannelSearchResult) {
+        self.id = result.authorId
+        self.result = result
     }
     
-    var name: String { return item.snippet.title }
-    var thumbnailURL: URL? { return URL(string: item.snippet.thumbnails.medium.url)}
-    var playlistID: String { return item.contentDetails.relatedPlaylists.uploads }
+    var name: String { return result.author }
+    var thumbnailURL: URL? { return result.thumbnailURL }
     
     var playlist = [Video]()
     var nextVideo: Video? { return playlist.filter { $0.progress <= 0 }.first }
     
     func reloadPlaylistItems(completionHandler: @escaping () -> Void) {
-        guard let url = YouTube.playlistItemListURL(for: playlistID) else { completionHandler(); return }
+        guard let url = Invidious.channelVideosURL(for: id) else { completionHandler(); return }
         
-        YouTube.queryAPI(with: url) { (data, response, error) in
+        Invidious.queryAPI(with: url) { (data, response, error) in
             if let data = data {
                 do {
-                    let playlistItemList = try YouTube.decode(YTPlaylistItemListResponse.self, from: data)
-                    self.playlist = playlistItemList.items.map { Video(item: $0) }
+                    let videoResults = try Invidious.decode([VideoResult].self, from: data)
+                    self.playlist = videoResults.map { Video(result: $0) }
                     self.refreshUserData()
                 } catch {
                     print("Error \(error)")
