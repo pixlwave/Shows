@@ -9,15 +9,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         application.registerForRemoteNotifications()
         UserData.reloadSubscriptions()
+        UserData.listenForChanges()
         
         return true
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        print("Notification received")
         let cloudNotification = CKNotification(fromRemoteNotificationDictionary: userInfo)
         if cloudNotification.notificationType == .query {
             if cloudNotification.title == "YouTubeChannel" { UserData.reloadSubscriptions() }
         }
+    }
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        print("success")
+    }
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print("fail")
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
