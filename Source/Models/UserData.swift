@@ -23,7 +23,7 @@ class UserData {
     
     static func reloadSubscriptions() {
         userDB.fetch(withRecordID: subscriptionsRecordID) { record, error in
-            guard let record = record else { print("Subscription Fetch Error: \(error)"); return }
+            guard let record = record else { print("Subscription Fetch Error: \(error.debugDescription)"); return }
             subscriptionIDs = Set<String>(record["subscriptionIDs"] as? [String] ?? [String]())
             subscriptionsRecord = record
             

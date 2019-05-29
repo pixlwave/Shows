@@ -82,10 +82,10 @@
             </objects>
             <point key="canvasLocation" x="901.60000000000002" y="90.404797601199405"/>
         </scene>
-        <!--Show Search Controller-->
+        <!--Search Controller-->
         <scene sceneID="bbB-8D-4Pf">
             <objects>
-                <collectionViewController id="pwd-LK-XxZ" customClass="ShowSearchController" customModule="Shows" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController id="pwd-LK-XxZ" customClass="SearchController" customModule="Shows" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="GNE-mR-0Ud">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

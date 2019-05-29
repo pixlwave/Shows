@@ -1,6 +1,6 @@
 import UIKit
 
-class ShowSearchController: UICollectionViewController {
+class SearchController: UICollectionViewController {
     
     var results = [ChannelSearchResult]()
     let searchController = UISearchController(searchResultsController: nil)
@@ -21,7 +21,7 @@ class ShowSearchController: UICollectionViewController {
 
 
 // MARK: UICollectionViewDataSource
-extension ShowSearchController {
+extension SearchController {
  
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let query = searchController.searchBar.text, !query.isEmpty else { return 0 }
@@ -47,7 +47,7 @@ extension ShowSearchController {
 
 
 // MARK: UICollectionViewDelegate
-extension ShowSearchController {
+extension SearchController {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? SearchResultCell else { return }
@@ -74,7 +74,7 @@ extension ShowSearchController {
 
 
 // MARK: UISearchResultsUpdating
-extension ShowSearchController: UISearchResultsUpdating {
+extension SearchController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
         //
@@ -84,7 +84,7 @@ extension ShowSearchController: UISearchResultsUpdating {
 
 
 // MARK: UISearchBarDelegate
-extension ShowSearchController: UISearchBarDelegate {
+extension SearchController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let query = searchController.searchBar.text, !query.isEmpty else { return }
         
