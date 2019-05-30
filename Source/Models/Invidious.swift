@@ -42,31 +42,30 @@ class Invidious {
         }))
     }
     
-    static func search(for query: String, completionHandler: @escaping ([ChannelSearchResult]) -> Void) {
-        guard let url = channelSearchURL(for: query) else { completionHandler([ChannelSearchResult]()); return }
+    static func search(for query: String, completionHandler: @escaping ([Channel]) -> Void) {
+        guard let url = channelSearchURL(for: query) else { completionHandler([Channel]()); return }
         
         queryAPI(with: url) { data, response, error in
             if let data = data {
                 do {
-                    let searchList = try jsonDecoder.decode([ChannelSearchResult].self, from: data)
+                    let searchList = try jsonDecoder.decode([Channel].self, from: data)
                     completionHandler(searchList)
                 } catch {
                     print("Error \(error)")
-                    completionHandler([ChannelSearchResult]())
+                    completionHandler([Channel]())
                 }
             }
         }
     }
     
-    static func subscribe(to searchResult: ChannelSearchResult, completionHandler: @escaping () -> Void) {
-        let channel = Channel(result: searchResult)
+    static func subscribe(to channel: Channel, completionHandler: @escaping () -> Void) {
         subscriptions.append(channel)
-        UserData.saveSubscription(to: searchResult.authorId)    // FIXME: This gets called on initial load. Needs getChannel()
+        UserData.saveSubscription(to: channel.authorId)    // FIXME: This gets called on initial load. Needs getChannel()
         channel.reloadPlaylistItems(completionHandler: completionHandler)
     }
     
-    static func unsubscribe(from searchResult: ChannelSearchResult) {
-        subscriptions = subscriptions.filter {$0.id != searchResult.authorId }
+    static func unsubscribe(from searchResult: Channel) {
+        subscriptions = subscriptions.filter {$0.authorId != searchResult.authorId }
         UserData.deleteSubscription(to: searchResult.authorId)
     }
     

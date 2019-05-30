@@ -55,7 +55,7 @@ class SubscriptionsController: UICollectionViewController {
             actionSheet.addAction(watchedAction)
             
             let shareAction = UIAlertAction(title: "Share", style: .default) { action in
-                guard let shareURL = URL(string: "https://youtube.com/channel/\(channel.id)") else { return }
+                guard let shareURL = URL(string: "https://youtube.com/channel/\(channel.authorId)") else { return }
                 let shareSheet = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
                 shareSheet.popoverPresentationController?.sourceView = cell
                 shareSheet.popoverPresentationController?.sourceRect = cell.bounds
@@ -65,7 +65,7 @@ class SubscriptionsController: UICollectionViewController {
             actionSheet.addAction(shareAction)
             
             let unsubscribeAction = UIAlertAction(title: "Unsubscribe", style: .destructive) { action in
-                Invidious.unsubscribe(from: channel.result)
+                Invidious.unsubscribe(from: channel)
                 self.collectionView?.deleteItems(at: [indexPath])
             }
             actionSheet.addAction(unsubscribeAction)

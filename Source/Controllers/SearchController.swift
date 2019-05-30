@@ -2,7 +2,7 @@ import UIKit
 
 class SearchController: UICollectionViewController {
     
-    var results = [ChannelSearchResult]()
+    var results = [Channel]()
     let searchController = UISearchController(searchResultsController: nil)
     
     override func viewDidLoad() {
