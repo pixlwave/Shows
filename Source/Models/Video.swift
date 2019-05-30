@@ -4,14 +4,14 @@ import CloudKit
 #warning("Consider whether this should be a struct?")
 class Video: Codable {
     let title: String
-    let videoId: String
-    let author: String
-    let authorId: String
-    let authorUrl: String
+    let id: String
+    let channel: String
+    let channelID: String
+    let channelURL: String
     
-    let videoThumbnails: [Thumbnail]
+    let thumbnails: [Thumbnail]
     let description: String
-    let descriptionHtml: String
+    let descriptionHTML: String
     
     let viewCount: Int
     let published: Int
@@ -31,14 +31,14 @@ class Video: Codable {
     
     enum CodingKeys: String, CodingKey {
         case title
-        case videoId
-        case author
-        case authorId
-        case authorUrl
+        case id = "videoId"
+        case channel = "author"
+        case channelID = "authorId"
+        case channelURL = "authorUrl"
         
-        case videoThumbnails
+        case thumbnails = "videoThumbnails"
         case description
-        case descriptionHtml
+        case descriptionHTML = "descriptionHtml"
         
         case viewCount
         case published
@@ -49,7 +49,7 @@ class Video: Codable {
     }
     
     var thumbnailURL: URL? {
-        let thumbnail = videoThumbnails.filter { $0.width > 200 }.sorted { $0.width < $1.width }.first
+        let thumbnail = thumbnails.filter { $0.width > 200 }.sorted { $0.width < $1.width }.first
         return URL(string: thumbnail?.url ?? "")
     }
     var publishedAt: Date { return Date(timeIntervalSince1970: TimeInterval(published)) }
@@ -61,7 +61,7 @@ class Video: Codable {
     var progress: Double {
         get { return userData?["progress"] as? Double ?? 0 }
         set {
-            let record = userData ?? CKRecord(recordType: "VideoUserData", recordID: CKRecord.ID(recordName: videoId))
+            let record = userData ?? CKRecord(recordType: "VideoUserData", recordID: CKRecord.ID(recordName: id))
             record["progress"] = newValue as CKRecordValue
             UserData.save(record)
             userData = record

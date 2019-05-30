@@ -60,13 +60,13 @@ class Invidious {
     
     static func subscribe(to channel: Channel, completionHandler: @escaping () -> Void) {
         subscriptions.append(channel)
-        UserData.saveSubscription(to: channel.authorId)    // FIXME: This gets called on initial load. Needs getChannel()
+        UserData.saveSubscription(to: channel.id)    // FIXME: This gets called on initial load. Needs getChannel()
         channel.reloadPlaylistItems(completionHandler: completionHandler)
     }
     
     static func unsubscribe(from searchResult: Channel) {
-        subscriptions = subscriptions.filter {$0.authorId != searchResult.authorId }
-        UserData.deleteSubscription(to: searchResult.authorId)
+        subscriptions = subscriptions.filter {$0.id != searchResult.id }
+        UserData.deleteSubscription(to: searchResult.id)
     }
     
     static func channelSearchURL(for query: String) -> URL? {

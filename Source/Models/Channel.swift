@@ -4,15 +4,15 @@ import CloudKit
 #warning("Consider whether this should be a struct?")
 class Channel: Codable {
     let type: String
-    let author: String
-    let authorId: String
-    let authorUrl: String
+    let name: String
+    let id: String
+    let url: String
     
-    let authorThumbnails: [Thumbnail]
+    let thumbnails: [Thumbnail]
     let subCount: Int
     let videoCount: Int
     let description: String
-    let descriptionHtml: String
+    let descriptionHTML: String
     
     struct Thumbnail: Codable {
         let url: String
@@ -24,21 +24,20 @@ class Channel: Codable {
     
     enum CodingKeys: String, CodingKey {
         case type
-        case author
-        case authorId
-        case authorUrl
+        case name = "author"
+        case id = "authorId"
+        case url = "authorUrl"
         
-        case authorThumbnails
+        case thumbnails = "authorThumbnails"
         case subCount
         case videoCount
         case description
-        case descriptionHtml
+        case descriptionHTML = "descriptionHtml"
     }
     
-    var name: String { return author }
-    var subscribed: Bool { return Invidious.subscriptions.contains { $0.authorId == authorId } }
+    var subscribed: Bool { return Invidious.subscriptions.contains { $0.id == id } }
     var thumbnailURL: URL? {
-        let thumbnail = authorThumbnails.filter { $0.width > 200 }.sorted { $0.width < $1.width }.first
+        let thumbnail = thumbnails.filter { $0.width > 200 }.sorted { $0.width < $1.width }.first
         return URL(string: thumbnail?.url ?? "")
     }
     
@@ -46,7 +45,7 @@ class Channel: Codable {
     var nextVideo: Video? { return playlist.filter { $0.progress <= 0 }.first }
     
     func reloadPlaylistItems(completionHandler: @escaping () -> Void) {
-        guard let url = Invidious.channelVideosURL(for: authorId) else { completionHandler(); return }
+        guard let url = Invidious.channelVideosURL(for: id) else { completionHandler(); return }
         
         Invidious.queryAPI(with: url) { (data, response, error) in
             if let data = data {
@@ -63,12 +62,12 @@ class Channel: Codable {
     
     func refreshUserData() {
         // download latest cloudkit records and attach to videos
-        let recordIDs = self.playlist.map { CKRecord.ID(recordName: $0.videoId) }
+        let recordIDs = self.playlist.map { CKRecord.ID(recordName: $0.id) }
         let operation = CKFetchRecordsOperation(recordIDs: recordIDs)
         operation.fetchRecordsCompletionBlock = { results, error in
             guard let results = results else { print("Fetch Error"); return }
             for video in self.playlist {
-                let record = results.first(where: { $0.key.recordName == video.videoId })?.value ?? CKRecord(recordType: "VideoUserData", recordID: CKRecord.ID(recordName: video.videoId))
+                let record = results.first(where: { $0.key.recordName == video.id })?.value ?? CKRecord(recordType: "VideoUserData", recordID: CKRecord.ID(recordName: video.id))
                 video.userData = record
             }
             DispatchQueue.main.async { NotificationCenter.default.post(Notification(name: .showUpdated)) }

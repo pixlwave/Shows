@@ -55,7 +55,7 @@ class SubscriptionsController: UICollectionViewController {
             actionSheet.addAction(watchedAction)
             
             let shareAction = UIAlertAction(title: "Share", style: .default) { action in
-                guard let shareURL = URL(string: "https://youtube.com/channel/\(channel.authorId)") else { return }
+                guard let shareURL = URL(string: "https://youtube.com/channel/\(channel.id)") else { return }
                 let shareSheet = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
                 shareSheet.popoverPresentationController?.sourceView = cell
                 shareSheet.popoverPresentationController?.sourceRect = cell.bounds

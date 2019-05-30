@@ -53,7 +53,7 @@ class PlayerController: UIViewController {
     }
     
     @IBAction func shareVideo(_ sender: UIBarButtonItem) {
-        guard let video = video, let shareURL = URL(string: "https://youtu.be/\(video.videoId)") else { return }
+        guard let video = video, let shareURL = URL(string: "https://youtu.be/\(video.id)") else { return }
         let shareSheet = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
         shareSheet.popoverPresentationController?.barButtonItem = sender    // FIXME: centre sheet arrow on button
         present(shareSheet, animated: true)
@@ -61,7 +61,7 @@ class PlayerController: UIViewController {
     
     func loadEmbedHTML() {
         guard let video = video else { return }
-        let htmlString = html(for: video.videoId)
+        let htmlString = html(for: video.id)
         
         webView.loadHTMLString(htmlString, baseURL: nil)
     }
