@@ -128,19 +128,11 @@
 			isa = PBXGroup;
 			children = (
 				A531815A20B6E64E00EC9282 /* Invidious.swift */,
-				A56CA4E420BB310B000C38A4 /* UserData.swift */,
-				A59E5818229F128500CA93EB /* Invidius API */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		A59E5818229F128500CA93EB /* Invidius API */ = {
-			isa = PBXGroup;
-			children = (
 				A52AB403229EF6A3002B6848 /* Channel.swift */,
 				A59E5819229F13FA00CA93EB /* Video.swift */,
+				A56CA4E420BB310B000C38A4 /* UserData.swift */,
 			);
-			path = "Invidius API";
+			path = Models;
 			sourceTree = "<group>";
 		};
 		A5A14F9320B72D3E0089FD4C /* Views */ = {
