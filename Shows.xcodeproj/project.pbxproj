@@ -25,6 +25,7 @@
 		A59E581A229F13FA00CA93EB /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59E5819229F13FA00CA93EB /* Video.swift */; };
 		A5A14F9020B72AED0089FD4C /* Extends.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A14F8F20B72AED0089FD4C /* Extends.swift */; };
 		A5A14F9220B72D350089FD4C /* ShowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A14F9120B72D350089FD4C /* ShowCell.swift */; };
+		A5F2F4B522A18B03003BD69C /* ChannelDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F2F4B422A18B03003BD69C /* ChannelDetail.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +50,7 @@
 		A59E5819229F13FA00CA93EB /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		A5A14F8F20B72AED0089FD4C /* Extends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extends.swift; sourceTree = "<group>"; };
 		A5A14F9120B72D350089FD4C /* ShowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowCell.swift; sourceTree = "<group>"; };
+		A5F2F4B422A18B03003BD69C /* ChannelDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelDetail.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 				A52AB403229EF6A3002B6848 /* Channel.swift */,
 				A59E5819229F13FA00CA93EB /* Video.swift */,
 				A56CA4E420BB310B000C38A4 /* UserData.swift */,
+				A5F2F4B422A18B03003BD69C /* ChannelDetail.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -233,6 +236,7 @@
 				A52AB404229EF6A3002B6848 /* Channel.swift in Sources */,
 				A52C40FD20B822560017D7AA /* VideoCell.swift in Sources */,
 				A5A14F9220B72D350089FD4C /* ShowCell.swift in Sources */,
+				A5F2F4B522A18B03003BD69C /* ChannelDetail.swift in Sources */,
 				A531814220B6E03400EC9282 /* SubscriptionsController.swift in Sources */,
 				A51F1A5A20C2A8FF00D3284C /* SearchController.swift in Sources */,
 				A531815B20B6E64E00EC9282 /* Invidious.swift in Sources */,

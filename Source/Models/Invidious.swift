@@ -20,13 +20,31 @@ class Invidious {
         
         for id in UserData.subscriptionIDs {
             group.enter()
-            #warning("Implement this")
-            // subscribe(to: id) { group.leave() }
+            loadSubscription(from: id) { group.leave() }
         }
         
         group.notify(queue: DispatchQueue.main, work: DispatchWorkItem(block: {
             sortSubscriptions()
         }))
+    }
+    
+    static func loadSubscription(from id: String, completionHandler: @escaping () -> Void) {
+        guard let url = channelSearchURL(for: id) else { completionHandler(); return }
+        
+        queryAPI(with: url) { data, response, error in
+            if let data = data {
+                do {
+                    if let channel = try jsonDecoder.decode([Channel].self, from: data).first {
+                        subscribe(to: channel, completionHandler: completionHandler)
+                    } else {
+                        completionHandler()
+                    }
+                } catch {
+                    print("Error \(error)")
+                    completionHandler()
+                }
+            }
+        }
     }
     
     static func reload() {
@@ -82,7 +100,7 @@ class Invidious {
         return urlComponents.url
     }
     
-    static func channelItemListURL(for channelID: String) -> URL? {
+    static func channelDetailURL(for channelID: String) -> URL? {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "invidio.us"

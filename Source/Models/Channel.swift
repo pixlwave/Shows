@@ -20,8 +20,6 @@ class Channel: Codable {
         let height: Int
     }
     
-    var userData: CKRecord?
-    
     enum CodingKeys: String, CodingKey {
         case type
         case name = "author"
@@ -34,6 +32,8 @@ class Channel: Codable {
         case description
         case descriptionHTML = "descriptionHtml"
     }
+    
+    var userData: CKRecord?
     
     var subscribed: Bool { return Invidious.subscriptions.contains { $0.id == id } }
     var thumbnailURL: URL? {
