@@ -78,7 +78,7 @@ class Invidious {
     
     static func subscribe(to channel: Channel, completionHandler: @escaping () -> Void) {
         subscriptions.append(channel)
-        UserData.saveSubscription(to: channel.id)    // FIXME: This gets called on initial load. Needs getChannel()
+        UserData.saveSubscription(to: channel.id);  #warning("This gets called on initial load. Needs getChannel()")
         channel.reloadPlaylistItems(completionHandler: completionHandler)
     }
     
@@ -87,8 +87,15 @@ class Invidious {
         UserData.deleteSubscription(to: searchResult.id)
     }
     
-    static func channelSearchURL(for query: String) -> URL? {
+    private static func apiURLComponents() -> URLComponents {
         var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = "invidio.us"
+        return urlComponents
+    }
+    
+    static func channelSearchURL(for query: String) -> URL? {
+        var urlComponents = apiURLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "invidio.us"
         urlComponents.path = "/api/v1/search"
@@ -101,7 +108,7 @@ class Invidious {
     }
     
     static func channelDetailURL(for channelID: String) -> URL? {
-        var urlComponents = URLComponents()
+        var urlComponents = apiURLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "invidio.us"
         urlComponents.path = "/api/v1/channels/\(channelID)"
@@ -112,20 +119,17 @@ class Invidious {
         return urlComponents.url
     }
     
-    static func playlistItemListURL(for playlistID: String) -> URL? {
-        var urlComponents = URLComponents()
+    static func feedURL(for channelID: String) -> URL? {
+        var urlComponents = apiURLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "invidio.us"
-        urlComponents.path = "/api/v1/playlists/\(playlistID)"
-        urlComponents.queryItems = [
-            URLQueryItem(name: "page", value: "0")
-        ]
+        urlComponents.path = "/feed/channel/\(channelID)"
         
         return urlComponents.url
     }
     
     static func channelVideosURL(for channelID: String) -> URL? {
-        var urlComponents = URLComponents()
+        var urlComponents = apiURLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "invidio.us"
         urlComponents.path = "/api/v1/channels/\(channelID)/videos"
