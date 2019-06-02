@@ -35,10 +35,8 @@ class ShowController: UICollectionViewController {
             else { return }
             
             XCDYouTubeClient.default().getVideoWithIdentifier(video.id) { video, error in
-                guard let video = video else { return }
-                guard let url = video.streamURLs[XCDYouTubeVideoQuality.HD720.rawValue] else { return }
-                
-                playerVC.player = AVPlayer(url: url)
+                guard let video = video, let item = video.bestQualityItem() else { return }
+                playerVC.player = AVPlayer(playerItem: item)
                 playerVC.player?.addObserver(self, forKeyPath: "rate", options: .new, context: nil)
                 playerVC.player?.play()
             }
