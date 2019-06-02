@@ -243,7 +243,7 @@
                                     <outlet property="thumbnailImageView" destination="Luc-nn-mUl" id="ie4-KE-K9V"/>
                                     <outlet property="titleLabel" destination="Hyd-ng-B01" id="Un7-pT-9le"/>
                                     <outlet property="watchedLabel" destination="Vml-VO-5o8" id="tQw-Hg-csl"/>
-                                    <segue destination="GBQ-nE-pmB" kind="show" identifier="PlayerSegue" id="Fxu-WM-oIY"/>
+                                    <segue destination="GBQ-nE-pmB" kind="presentation" identifier="PlayerSegue" id="Fxu-WM-oIY"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>

@@ -40,7 +40,7 @@ class ShowController: UICollectionViewController {
                 
                 playerVC.player = AVPlayer(url: url)
                 playerVC.player?.addObserver(self, forKeyPath: "rate", options: .new, context: nil)
-                playerVC.player?.play();  #warning("Doesn't go full screen?")
+                playerVC.player?.play()
             }
             
             playerVC.entersFullScreenWhenPlaybackBegins = true
@@ -49,13 +49,6 @@ class ShowController: UICollectionViewController {
             playingVideoCell = cell
             playingVideo = video
         }
-        
-        // @IBAction func shareVideo(_ sender: UIBarButtonItem) {
-        //     guard let video = video, let shareURL = URL(string: "https://youtu.be/\(video.id)") else { return }
-        //     let shareSheet = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
-        //     shareSheet.popoverPresentationController?.barButtonItem = sender    // FIXME: centre sheet arrow on button
-        //     present(shareSheet, animated: true)
-        // }
     }
     
     @objc func refreshShow() {
