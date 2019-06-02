@@ -96,8 +96,6 @@ class Invidious {
     
     static func channelSearchURL(for query: String) -> URL? {
         var urlComponents = apiURLComponents()
-        urlComponents.scheme = "https"
-        urlComponents.host = "invidio.us"
         urlComponents.path = "/api/v1/search"
         urlComponents.queryItems = [
             URLQueryItem(name: "q", value: query),
@@ -109,8 +107,6 @@ class Invidious {
     
     static func channelDetailURL(for channelID: String) -> URL? {
         var urlComponents = apiURLComponents()
-        urlComponents.scheme = "https"
-        urlComponents.host = "invidio.us"
         urlComponents.path = "/api/v1/channels/\(channelID)"
         urlComponents.queryItems = [
             URLQueryItem(name: "sort_by", value: "newest")
@@ -121,8 +117,6 @@ class Invidious {
     
     static func feedURL(for channelID: String) -> URL? {
         var urlComponents = apiURLComponents()
-        urlComponents.scheme = "https"
-        urlComponents.host = "invidio.us"
         urlComponents.path = "/feed/channel/\(channelID)"
         
         return urlComponents.url
@@ -130,8 +124,6 @@ class Invidious {
     
     static func channelVideosURL(for channelID: String) -> URL? {
         var urlComponents = apiURLComponents()
-        urlComponents.scheme = "https"
-        urlComponents.host = "invidio.us"
         urlComponents.path = "/api/v1/channels/\(channelID)/videos"
         urlComponents.queryItems = [
             URLQueryItem(name: "page", value: "0"),
