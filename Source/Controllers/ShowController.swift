@@ -7,7 +7,7 @@ class ShowController: UICollectionViewController {
     var show: Channel?
     
     var refreshControl = UIRefreshControl()
-    weak var playerController: AVPlayerViewController?
+    var playerController: AVPlayerViewController?
     weak var playingVideoCell: VideoCell?
     weak var playingVideo: Video?
     
@@ -45,7 +45,6 @@ class ShowController: UICollectionViewController {
             
             playerVC.entersFullScreenWhenPlaybackBegins = true
             playerVC.delegate = self
-            playerController = playerVC
             playingVideoCell = cell
             playingVideo = video
         }
@@ -155,4 +154,11 @@ extension ShowController: UICollectionViewDelegateFlowLayout {
 // MARK: AVPlayerViewControllerDelegate
 extension ShowController: AVPlayerViewControllerDelegate {
     
+    func playerViewControllerWillStartPictureInPicture(_ playerViewController: AVPlayerViewController) {
+        playerController = playerViewController
+    }
+    
+    func playerViewControllerWillStopPictureInPicture(_ playerViewController: AVPlayerViewController) {
+        //
+    }
 }
