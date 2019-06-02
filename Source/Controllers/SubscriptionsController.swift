@@ -8,11 +8,9 @@ class SubscriptionsController: UICollectionViewController {
         super.viewDidLoad()
         
         refreshControl.addTarget(self, action: #selector(refreshSubscriptions), for: .valueChanged)
-        collectionView?.refreshControl = refreshControl
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+        collectionView.refreshControl = refreshControl
+        collectionView.setContentOffset(CGPoint(x: 0, y: -refreshControl.frame.height), animated: false)
+        refreshControl.beginRefreshing()
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .subsUpdated, object: nil)
     }
