@@ -23,10 +23,14 @@ class SubscriptionsController: UICollectionViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ShowSegue" {
-            guard let destVC = segue.destination as? ShowController else { return }
-            guard let tappedCell = sender as? ShowCell else { return }
-            guard let channelIndex = collectionView?.indexPath(for: tappedCell)?.row else { return }
+            guard
+                let destVC = segue.destination as? ShowController,
+                let tappedCell = sender as? ShowCell,
+                let channelIndex = collectionView?.indexPath(for: tappedCell)?.row
+            else { return }
+                
             destVC.show = Invidious.subscriptions[channelIndex]
+            destVC.navigationItem.title = Invidious.subscriptions[channelIndex].name
         }
     }
     

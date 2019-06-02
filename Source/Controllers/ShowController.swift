@@ -1,10 +1,15 @@
 import UIKit
+import AVKit
+import XCDYouTubeKit
 
 class ShowController: UICollectionViewController {
     
     var show: Channel?
     
     var refreshControl = UIRefreshControl()
+    weak var playerController: AVPlayerViewController?
+    weak var playingVideoCell: VideoCell?
+    weak var playingVideo: Video?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,23 +21,41 @@ class ShowController: UICollectionViewController {
         collectionView?.invalidateIntrinsicContentSize()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        navigationItem.title = show?.name
-    }
-    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         (collectionView?.collectionViewLayout as? UICollectionViewFlowLayout)?.invalidateLayout()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "PlayerSegue" {
-            guard let destVC = segue.destination as? PlayerController else { return }
-            guard let tappedCell = sender as? VideoCell else { return }
-            guard let videoIndex = collectionView?.indexPath(for: tappedCell)?.row else { return }
-            guard let video = show?.playlist[videoIndex] else { return }
-            destVC.video = video
-            destVC.videoCell = tappedCell
+            guard
+                let playerVC = segue.destination as? AVPlayerViewController,
+                let cell = sender as? VideoCell,
+                let videoIndex = collectionView?.indexPath(for: cell)?.row,
+                let video = show?.playlist[videoIndex]
+            else { return }
+            
+            XCDYouTubeClient.default().getVideoWithIdentifier(video.id) { video, error in
+                guard let video = video else { return }
+                guard let url = video.streamURLs[XCDYouTubeVideoQuality.HD720.rawValue] else { return }
+                
+                playerVC.player = AVPlayer(url: url)
+                playerVC.player?.addObserver(self, forKeyPath: "rate", options: .new, context: nil)
+                playerVC.player?.play();  #warning("Doesn't go full screen?")
+            }
+            
+            playerVC.entersFullScreenWhenPlaybackBegins = true
+            playerVC.delegate = self
+            playerController = playerVC
+            playingVideoCell = cell
+            playingVideo = video
         }
+        
+        // @IBAction func shareVideo(_ sender: UIBarButtonItem) {
+        //     guard let video = video, let shareURL = URL(string: "https://youtu.be/\(video.id)") else { return }
+        //     let shareSheet = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+        //     shareSheet.popoverPresentationController?.barButtonItem = sender    // FIXME: centre sheet arrow on button
+        //     present(shareSheet, animated: true)
+        // }
     }
     
     @objc func refreshShow() {
@@ -81,6 +104,15 @@ class ShowController: UICollectionViewController {
         }
     }
     
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "rate", let rate = change?[.newKey] as? Float, rate == 0, let player = object as? AVPlayer {
+            guard let item = player.currentItem else { return }
+            let progress = item.currentTime().seconds / item.duration.seconds
+            playingVideo?.progress = progress
+            playingVideoCell?.watchedLabel.isHidden = progress <= 0
+        }
+    }
+    
 }
 
 
@@ -124,4 +156,10 @@ extension ShowController: UICollectionViewDelegateFlowLayout {
         if numberOfColumns > 1 { cellWidth -= flowLayout.minimumInteritemSpacing }
         return CGSize(width: cellWidth, height: (cellWidth / 32 * 9).rounded())
     }
+}
+
+
+// MARK: AVPlayerViewControllerDelegate
+extension ShowController: AVPlayerViewControllerDelegate {
+    
 }

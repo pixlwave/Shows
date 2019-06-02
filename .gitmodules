@@ -1,0 +1,3 @@
+[submodule "XCDYouTubeKit"]
+	path = XCDYouTubeKit
+	url = git@github.com:0xced/XCDYouTubeKit.git
