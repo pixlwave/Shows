@@ -30,14 +30,18 @@ extension SearchController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let video = results[indexPath.row]
+        let show = results[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SearchResultCell", for: indexPath) as? SearchResultCell ?? SearchResultCell()
-        cell.nameLabel.text = video.name
-        cell.subscriptionStatusLabel.text = video.subscribed ? "Subscribed" : "Subscribe"
+        cell.nameLabel.text = show.name
+        cell.subscriptionStatusLabel.text = show.subscribed ? "Subscribed" : "Subscribe"
         cell.thumbnailImageView.image = nil
         
-        if let url = video.thumbnailURL {
-            cell.thumbnailImageView.load(from: url)
+        if let url = show.thumbnailURL {
+            cell.thumbnailDataTask = URLSession.shared.dataTask(with: url) { data, response, error in
+                guard let data = data, let image = UIImage(data: data) else { return }
+                DispatchQueue.main.async { cell.thumbnailImageView.image = image }
+            }
+            cell.thumbnailDataTask?.resume()
         }
         
         return cell

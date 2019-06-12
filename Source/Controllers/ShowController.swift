@@ -122,7 +122,11 @@ extension ShowController {
         cell.publishedAtLabel.text = video.publishedString
         
         if let url = video.thumbnailURL {
-            cell.thumbnailImageView.load(from: url)
+            cell.thumbnailDataTask = URLSession.shared.dataTask(with: url) { data, response, error in
+                guard let data = data, let image = UIImage(data: data) else { return }
+                DispatchQueue.main.async { cell.thumbnailImageView.image = image }
+            }
+            cell.thumbnailDataTask?.resume()
         }
         
         return cell

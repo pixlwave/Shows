@@ -6,8 +6,11 @@ class VideoCell: UICollectionViewCell {
     @IBOutlet weak var publishedAtLabel: UILabel!
     @IBOutlet weak var watchedLabel: UILabel!
     
+    var thumbnailDataTask: URLSessionDataTask?
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         thumbnailImageView.image = nil
+        thumbnailDataTask?.cancel()
     }
 }
