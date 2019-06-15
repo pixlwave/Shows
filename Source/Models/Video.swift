@@ -2,7 +2,7 @@ import Foundation
 import CloudKit
 
 #warning("Consider whether this should be a struct?")
-class Video: Codable {
+class Video: Codable, Hashable {
     let title: String
     let id: String
     let channel: String
@@ -71,5 +71,13 @@ class Video: Codable {
     var watched: Bool {
         get { return progress > 0 }
         set { progress = newValue ? 1 : 0 }
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
+    static func == (lhs: Video, rhs: Video) -> Bool {
+        return lhs.id == rhs.id
     }
 }

@@ -2,7 +2,7 @@ import Foundation
 import CloudKit
 
 #warning("Consider whether this should be a struct?")
-class Channel: Codable {
+class Channel: Codable, Hashable {
     let type: String
     let name: String
     let id: String
@@ -74,4 +74,13 @@ class Channel: Codable {
         }
         CKContainer.default().privateCloudDatabase.add(operation)
     }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
+    static func == (lhs: Channel, rhs: Channel) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
 }
