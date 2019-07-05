@@ -2,6 +2,11 @@ import UIKit
 
 class SubscriptionsController: UICollectionViewController {
     
+    enum Section: Int, Hashable {
+        case main
+    }
+    
+    lazy var dataSource = createDataSource()
     var refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
@@ -12,11 +17,10 @@ class SubscriptionsController: UICollectionViewController {
         collectionView.setContentOffset(CGPoint(x: 0, y: -refreshControl.frame.height), animated: false)
         refreshControl.beginRefreshing()
         
+        collectionView.dataSource = dataSource
+        collectionView.collectionViewLayout = createLayout()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .subsUpdated, object: nil)
-    }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        (collectionView?.collectionViewLayout as? UICollectionViewFlowLayout)?.invalidateLayout()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -32,6 +36,42 @@ class SubscriptionsController: UICollectionViewController {
         }
     }
     
+    func createDataSource() -> UICollectionViewDiffableDataSource<Section, Channel> {
+        return UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, channel -> UICollectionViewCell? in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ShowCell", for: indexPath) as? ShowCell ?? ShowCell()
+            cell.nameLabel.text = channel.name
+            cell.thumbnailImageView.image = nil
+            
+            if let url = channel.thumbnailURL {
+                cell.thumbnailDataTask = URLSession.shared.dataTask(with: url) { data, response, error in
+                    guard let data = data, let image = UIImage(data: data) else { return }
+                    DispatchQueue.main.async { cell.thumbnailImageView.image = image }
+                }
+                cell.thumbnailDataTask?.resume()
+            }
+            
+            return cell
+        }
+    }
+    
+    func createLayout() -> UICollectionViewCompositionalLayout {
+        return UICollectionViewCompositionalLayout { sectionIndex, layoutEnvironment -> NSCollectionLayoutSection? in
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+            
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(135))
+            let minimumWidth: CGFloat = 100
+            let count = Int(layoutEnvironment.container.effectiveContentSize.width / minimumWidth)
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: count)
+            
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = item.contentInsets
+            
+            return section
+        }
+    }
+    
     @objc func refreshSubscriptions() {
         DispatchQueue.global(qos: .userInitiated).async {
             Invidious.reload()
@@ -39,7 +79,10 @@ class SubscriptionsController: UICollectionViewController {
     }
     
     @objc func reloadData() {
-        collectionView?.reloadData()
+        let snapshot = NSDiffableDataSourceSnapshot<Section, Channel>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(Invidious.subscriptions)
+        dataSource.apply(snapshot)
         refreshControl.endRefreshing()
     }
 
@@ -80,50 +123,5 @@ class SubscriptionsController: UICollectionViewController {
             actionSheet.popoverPresentationController?.permittedArrowDirections = [.up, .down]
             present(actionSheet, animated: true)
         }
-    }
-}
-
-
-// MARK: UICollectionViewDataSource
-extension SubscriptionsController {
-    
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return Invidious.subscriptions.count
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let show = Invidious.subscriptions[indexPath.row]
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ShowCell", for: indexPath) as? ShowCell ?? ShowCell()
-        cell.nameLabel.text = show.name
-        cell.thumbnailImageView.image = nil
-        
-        if let url = show.thumbnailURL {
-            cell.thumbnailDataTask = URLSession.shared.dataTask(with: url) { data, response, error in
-                guard let data = data, let image = UIImage(data: data) else { return }
-                DispatchQueue.main.async { cell.thumbnailImageView.image = image }
-            }
-            cell.thumbnailDataTask?.resume()
-        }
-        
-        return cell
-    }
-    
-}
-
-
-// MARK: UICollectionViewDelegateFlowLayout
-extension SubscriptionsController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout else { return
-            CGSize(width: 100, height: 115)
-        }
-        
-        // FIXME: just compute this once until view size changes?
-        let limit: CGFloat = 100
-        let width = collectionView.safeAreaLayoutGuide.layoutFrame.width
-        let numberOfColumns = (width / limit).rounded(.down)
-        var cellWidth = (width / numberOfColumns) - (flowLayout.sectionInset.left + flowLayout.sectionInset.right)
-        if numberOfColumns > 1 { cellWidth -= flowLayout.minimumInteritemSpacing }
-        return CGSize(width: cellWidth, height: cellWidth * 1.15)
     }
 }
