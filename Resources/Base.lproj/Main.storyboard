@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="H7i-QD-1Fw">
-    <device id="retina4_0" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14835.7" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="H7i-QD-1Fw">
+    <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14790.5"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -111,20 +108,19 @@
                                             <rect key="frame" x="10" y="10" width="100" height="100"/>
                                             <color key="backgroundColor" white="0.94999999999999996" alpha="1" colorSpace="calibratedWhite"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="100" id="Bm2-cG-xEh"/>
                                                 <constraint firstAttribute="width" secondItem="R4c-cr-fBz" secondAttribute="height" multiplier="1:1" id="yGF-rW-RHI"/>
                                             </constraints>
                                         </imageView>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tdO-6C-Urb">
                                             <rect key="frame" x="130" y="39" width="124" height="42.5"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vhk-fW-s9V">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Name" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vhk-fW-s9V">
                                                     <rect key="frame" x="0.0" y="0.0" width="47" height="20.5"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subscribe" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zBy-wi-IiP">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Subscribe" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zBy-wi-IiP">
                                                     <rect key="frame" x="0.0" y="24.5" width="124" height="18"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -145,6 +141,8 @@
                                 </view>
                                 <constraints>
                                     <constraint firstItem="tdO-6C-Urb" firstAttribute="centerY" secondItem="R4c-cr-fBz" secondAttribute="centerY" id="Gdb-tc-okN"/>
+                                    <constraint firstItem="R4c-cr-fBz" firstAttribute="top" secondItem="yd0-Lf-vB5" secondAttribute="top" constant="10" id="He4-dB-mDr"/>
+                                    <constraint firstAttribute="bottom" secondItem="R4c-cr-fBz" secondAttribute="bottom" constant="10" id="IVG-34-PIF"/>
                                     <constraint firstItem="R4c-cr-fBz" firstAttribute="centerY" secondItem="yd0-Lf-vB5" secondAttribute="centerY" id="NwP-0D-iMt"/>
                                     <constraint firstAttribute="trailing" secondItem="tdO-6C-Urb" secondAttribute="trailing" id="SVO-Kz-Dqa"/>
                                     <constraint firstItem="R4c-cr-fBz" firstAttribute="leading" secondItem="yd0-Lf-vB5" secondAttribute="leading" constant="10" id="XQQ-ce-IkM"/>
@@ -277,7 +275,7 @@
             <objects>
                 <navigationController id="H7i-QD-1Fw" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="4Ji-eA-DUM">
-                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>

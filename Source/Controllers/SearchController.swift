@@ -18,6 +18,7 @@ class SearchController: UICollectionViewController {
         definesPresentationContext = true
         
         collectionView.dataSource = dataSource
+        collectionView.collectionViewLayout = createLayout()
     }
     
     func createDataSource() -> UICollectionViewDiffableDataSource<Int, Channel> {
@@ -37,6 +38,22 @@ class SearchController: UICollectionViewController {
             }
             
             return cell
+        }
+    }
+    
+    func createLayout() -> UICollectionViewCompositionalLayout {
+        return UICollectionViewCompositionalLayout { section, layoutEnvironment -> NSCollectionLayoutSection? in
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+            
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(100))
+            let count = Int(layoutEnvironment.container.effectiveContentSize.width / 250)
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: count)
+            
+            let section = NSCollectionLayoutSection(group: group)
+            
+            return section
         }
     }
     
