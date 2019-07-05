@@ -6,6 +6,8 @@ class ShowController: UICollectionViewController {
     
     var show: Channel?
     
+    lazy var dataSource = createDataSource()
+    
     var refreshControl = UIRefreshControl()
     var playerController: AVPlayerViewController?
     weak var playingVideoCell: VideoCell?
@@ -14,15 +16,14 @@ class ShowController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        collectionView.dataSource = dataSource
+        collectionView.collectionViewLayout = createLayout()
+        
         refreshControl.addTarget(self, action: #selector(refreshShow), for: .valueChanged)
         collectionView?.refreshControl = refreshControl
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .showUpdated, object: nil)
-        collectionView?.invalidateIntrinsicContentSize()
-    }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        (collectionView?.collectionViewLayout as? UICollectionViewFlowLayout)?.invalidateLayout()
+        reloadData()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -48,6 +49,45 @@ class ShowController: UICollectionViewController {
         }
     }
     
+    func createDataSource() -> UICollectionViewDiffableDataSource<Int, Video> {
+        return UICollectionViewDiffableDataSource<Int, Video>(collectionView: collectionView) { collectionView, indexPath, video -> UICollectionViewCell? in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoCell", for: indexPath) as? VideoCell ?? VideoCell()
+            
+            cell.titleLabel.text = video.title
+            cell.thumbnailImageView.image = nil
+            cell.watchedLabel.isHidden = video.progress <= 0
+            cell.publishedAtLabel.text = video.publishedString
+            
+            if let url = video.thumbnailURL {
+                cell.thumbnailDataTask = URLSession.shared.dataTask(with: url) { data, response, error in
+                    guard let data = data, let image = UIImage(data: data) else { return }
+                    DispatchQueue.main.async { cell.thumbnailImageView.image = image }
+                }
+                cell.thumbnailDataTask?.resume()
+            }
+            
+            return cell
+        }
+    }
+    
+    func createLayout() -> UICollectionViewCompositionalLayout {
+        return UICollectionViewCompositionalLayout { sectionIndex, layoutEnvironment -> NSCollectionLayoutSection? in
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+            
+            let minimumWidth: CGFloat = 275
+            let count = Int(layoutEnvironment.container.effectiveContentSize.width / minimumWidth)
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(0.3 / CGFloat(count)))
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: count)
+            
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = item.contentInsets
+            
+            return section
+        }
+    }
+    
     @objc func refreshShow() {
         DispatchQueue.global(qos: .userInitiated).async {
             self.show?.reloadPlaylistItems { }
@@ -55,7 +95,10 @@ class ShowController: UICollectionViewController {
     }
     
     @objc func reloadData() {
-        collectionView?.reloadData()
+        let snapshot = NSDiffableDataSourceSnapshot<Int, Video>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(show?.playlist ?? [Video]())
+        dataSource.apply(snapshot)
         refreshControl.endRefreshing()
     }
     
@@ -103,53 +146,6 @@ class ShowController: UICollectionViewController {
         }
     }
     
-}
-
-
-// MARK: UICollectionViewControllerDataSource
-extension ShowController {
-    
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return show?.playlist.count ?? 0
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let video = show?.playlist[indexPath.row] else { return UICollectionViewCell() }
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoCell", for: indexPath) as? VideoCell ?? VideoCell()
-        cell.titleLabel.text = video.title
-        cell.thumbnailImageView.image = nil
-        cell.watchedLabel.isHidden = video.progress <= 0
-        cell.publishedAtLabel.text = video.publishedString
-        
-        if let url = video.thumbnailURL {
-            cell.thumbnailDataTask = URLSession.shared.dataTask(with: url) { data, response, error in
-                guard let data = data, let image = UIImage(data: data) else { return }
-                DispatchQueue.main.async { cell.thumbnailImageView.image = image }
-            }
-            cell.thumbnailDataTask?.resume()
-        }
-        
-        return cell
-    }
-    
-}
-
-
-// MARK: UICollectionViewDelegateFlowLayout
-extension ShowController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout else { return
-            CGSize(width: 295, height: 95)
-        }
-        
-        // FIXME: just compute this once until view size changes?
-        let limit: CGFloat = 275
-        let width = collectionView.safeAreaLayoutGuide.layoutFrame.width
-        let numberOfColumns = (width / limit).rounded(.down)
-        var cellWidth = (width / numberOfColumns) - (flowLayout.sectionInset.left + flowLayout.sectionInset.right)
-        if numberOfColumns > 1 { cellWidth -= flowLayout.minimumInteritemSpacing }
-        return CGSize(width: cellWidth, height: (cellWidth / 32 * 9).rounded())
-    }
 }
 
 

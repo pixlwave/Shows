@@ -58,9 +58,9 @@ class SubscriptionsController: UICollectionViewController {
         return UICollectionViewCompositionalLayout { sectionIndex, layoutEnvironment -> NSCollectionLayoutSection? in
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+            item.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
             
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(135))
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(125))
             let minimumWidth: CGFloat = 100
             let count = Int(layoutEnvironment.container.effectiveContentSize.width / minimumWidth)
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: count)
@@ -124,4 +124,5 @@ class SubscriptionsController: UICollectionViewController {
             present(actionSheet, animated: true)
         }
     }
+    
 }
