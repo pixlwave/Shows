@@ -4,6 +4,7 @@ class SearchController: UICollectionViewController {
     
     var results = [Channel]()
     let searchController = UISearchController(searchResultsController: nil)
+    lazy var dataSource = createDataSource()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -15,36 +16,39 @@ class SearchController: UICollectionViewController {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
+        
+        collectionView.dataSource = dataSource
     }
     
-}
-
-
-// MARK: UICollectionViewDataSource
-extension SearchController {
- 
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let query = searchController.searchBar.text, !query.isEmpty else { return 0 }
-        
-        return results.count
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let show = results[indexPath.row]
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SearchResultCell", for: indexPath) as? SearchResultCell ?? SearchResultCell()
-        cell.nameLabel.text = show.name
-        cell.subscriptionStatusLabel.text = show.subscribed ? "Subscribed" : "Subscribe"
-        cell.thumbnailImageView.image = nil
-        
-        if let url = show.thumbnailURL {
-            cell.thumbnailDataTask = URLSession.shared.dataTask(with: url) { data, response, error in
-                guard let data = data, let image = UIImage(data: data) else { return }
-                DispatchQueue.main.async { cell.thumbnailImageView.image = image }
+    func createDataSource() -> UICollectionViewDiffableDataSource<Int, Channel> {
+        return UICollectionViewDiffableDataSource<Int, Channel>(collectionView: collectionView) { collectionView, indexPath, channel -> UICollectionViewCell? in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SearchResultCell", for: indexPath) as? SearchResultCell ?? SearchResultCell()
+            
+            cell.nameLabel.text = channel.name
+            cell.subscriptionStatusLabel.text = channel.subscribed ? "Subscribed" : "Subscribe"
+            cell.thumbnailImageView.image = nil
+            
+            if let url = channel.thumbnailURL {
+                cell.thumbnailDataTask = URLSession.shared.dataTask(with: url) { data, response, error in
+                    guard let data = data, let image = UIImage(data: data) else { return }
+                    DispatchQueue.main.async { cell.thumbnailImageView.image = image }
+                }
+                cell.thumbnailDataTask?.resume()
             }
-            cell.thumbnailDataTask?.resume()
+            
+            return cell
+        }
+    }
+    
+    func applySnapshot() {
+        let snapshot = NSDiffableDataSourceSnapshot<Int, Channel>()
+        
+        if let query = searchController.searchBar.text, !query.isEmpty {
+            snapshot.appendSections([0])
+            snapshot.appendItems(results)
         }
         
-        return cell
+        dataSource.apply(snapshot)
     }
     
 }
@@ -95,7 +99,7 @@ extension SearchController: UISearchBarDelegate {
         Invidious.search(for: query) { results in
             DispatchQueue.main.async {
                 self.results = results
-                self.collectionView?.reloadData()
+                self.applySnapshot()
                 if results.count > 0 {
                     self.collectionView?.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
                 }
