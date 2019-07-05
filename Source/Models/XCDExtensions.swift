@@ -52,8 +52,6 @@ extension XCDYouTubeVideo {
         let videoAsset = AVAsset(url: videoURL)
         let audioAsset = AVAsset(url: audioURL)
         
-        return AVPlayerItem(asset: videoAsset)
-        
         let videoTrack = composition.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid)
         let audioTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid)
         
