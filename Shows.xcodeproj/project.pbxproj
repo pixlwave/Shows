@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -19,8 +19,7 @@
 		A531814720B6E03400EC9282 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A531814620B6E03400EC9282 /* Assets.xcassets */; };
 		A531814A20B6E03400EC9282 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A531814820B6E03400EC9282 /* LaunchScreen.storyboard */; };
 		A531815B20B6E64E00EC9282 /* Invidious.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531815A20B6E64E00EC9282 /* Invidious.swift */; };
-		A559168A22A32E72003D4B55 /* XCDYouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A559168722A32E67003D4B55 /* XCDYouTubeKit.framework */; };
-		A559168B22A32E72003D4B55 /* XCDYouTubeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A559168722A32E67003D4B55 /* XCDYouTubeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A566BBA222CFAD8F00A020CF /* XCDYouTubeKit in Frameworks */ = {isa = PBXBuildFile; productRef = A566BBA122CFAD8F00A020CF /* XCDYouTubeKit */; };
 		A56CA4E520BB310B000C38A4 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56CA4E420BB310B000C38A4 /* UserData.swift */; };
 		A59D5F6220C2C54800657998 /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59D5F6120C2C54800657998 /* SearchResultCell.swift */; };
 		A59E581A229F13FA00CA93EB /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59E5819229F13FA00CA93EB /* Video.swift */; };
@@ -30,37 +29,6 @@
 		A5F3990A22A4638D00A31931 /* XCDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F3990922A4638D00A31931 /* XCDExtensions.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		A559168422A32E67003D4B55 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A559167E22A32E67003D4B55 /* XCDYouTubeKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C2A3F2CD17F4827800AC1C3B;
-			remoteInfo = "XCDYouTubeKit Static Library";
-		};
-		A559168622A32E67003D4B55 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A559167E22A32E67003D4B55 /* XCDYouTubeKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C2F0E5731944F10E00D8EBA8;
-			remoteInfo = "XCDYouTubeKit Framework";
-		};
-		A559168822A32E67003D4B55 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A559167E22A32E67003D4B55 /* XCDYouTubeKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C20F579B18817D5400EDBFB0;
-			remoteInfo = "XCDYouTubeKit Tests";
-		};
-		A559168C22A32E72003D4B55 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A559167E22A32E67003D4B55 /* XCDYouTubeKit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = C2F0E5721944F10E00D8EBA8;
-			remoteInfo = "XCDYouTubeKit Framework";
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		A51756F522A2B0FD00FAE01A /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -68,7 +36,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A559168B22A32E72003D4B55 /* XCDYouTubeKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -91,7 +58,6 @@
 		A531814920B6E03400EC9282 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A531814B20B6E03400EC9282 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A531815A20B6E64E00EC9282 /* Invidious.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Invidious.swift; sourceTree = "<group>"; };
-		A559167E22A32E67003D4B55 /* XCDYouTubeKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = XCDYouTubeKit.xcodeproj; path = XCDYouTubeKit/XCDYouTubeKit.xcodeproj; sourceTree = "<group>"; };
 		A56CA4E420BB310B000C38A4 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		A59D5F6120C2C54800657998 /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
 		A59E5819229F13FA00CA93EB /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
@@ -107,7 +73,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A50547E320C4390400573C11 /* CloudKit.framework in Frameworks */,
-				A559168A22A32E72003D4B55 /* XCDYouTubeKit.framework in Frameworks */,
+				A566BBA222CFAD8F00A020CF /* XCDYouTubeKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,7 +83,6 @@
 		A50547E120C4390400573C11 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A559167E22A32E67003D4B55 /* XCDYouTubeKit.xcodeproj */,
 				A50547E220C4390400573C11 /* CloudKit.framework */,
 			);
 			name = Frameworks;
@@ -188,16 +153,6 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		A559167F22A32E67003D4B55 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				A559168522A32E67003D4B55 /* libXCDYouTubeKit.a */,
-				A559168722A32E67003D4B55 /* XCDYouTubeKit.framework */,
-				A559168922A32E67003D4B55 /* XCDYouTubeKit.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		A5A14F9320B72D3E0089FD4C /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -224,9 +179,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				A559168D22A32E72003D4B55 /* PBXTargetDependency */,
 			);
 			name = Shows;
+			packageProductDependencies = (
+				A566BBA122CFAD8F00A020CF /* XCDYouTubeKit */,
+			);
 			productName = Shows;
 			productReference = A531813C20B6E03400EC9282 /* Shows.app */;
 			productType = "com.apple.product-type.application";
@@ -268,44 +225,17 @@
 				Base,
 			);
 			mainGroup = A531813320B6E03400EC9282;
+			packageReferences = (
+				A566BBA022CFAD8F00A020CF /* XCRemoteSwiftPackageReference "XCDYouTubeKit" */,
+			);
 			productRefGroup = A531813D20B6E03400EC9282 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = A559167F22A32E67003D4B55 /* Products */;
-					ProjectRef = A559167E22A32E67003D4B55 /* XCDYouTubeKit.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				A531813B20B6E03400EC9282 /* Shows */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		A559168522A32E67003D4B55 /* libXCDYouTubeKit.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libXCDYouTubeKit.a;
-			remoteRef = A559168422A32E67003D4B55 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		A559168722A32E67003D4B55 /* XCDYouTubeKit.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = XCDYouTubeKit.framework;
-			remoteRef = A559168622A32E67003D4B55 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		A559168922A32E67003D4B55 /* XCDYouTubeKit.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = XCDYouTubeKit.xctest;
-			remoteRef = A559168822A32E67003D4B55 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		A531813A20B6E03400EC9282 /* Resources */ = {
@@ -344,14 +274,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		A559168D22A32E72003D4B55 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "XCDYouTubeKit Framework";
-			targetProxy = A559168C22A32E72003D4B55 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		A531814320B6E03400EC9282 /* Main.storyboard */ = {
@@ -479,7 +401,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -493,7 +416,10 @@
 				DEVELOPMENT_TEAM = NU8A5Y875P;
 				INFOPLIST_FILE = Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = uk.pixlwave.Shows;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -511,7 +437,10 @@
 				DEVELOPMENT_TEAM = NU8A5Y875P;
 				INFOPLIST_FILE = Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = uk.pixlwave.Shows;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -541,6 +470,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A566BBA022CFAD8F00A020CF /* XCRemoteSwiftPackageReference "XCDYouTubeKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/0xced/XCDYouTubeKit";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A566BBA122CFAD8F00A020CF /* XCDYouTubeKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A566BBA022CFAD8F00A020CF /* XCRemoteSwiftPackageReference "XCDYouTubeKit" */;
+			productName = XCDYouTubeKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A531813420B6E03400EC9282 /* Project object */;
 }

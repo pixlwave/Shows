@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "XCDYouTubeKit",
+        "repositoryURL": "https://github.com/0xced/XCDYouTubeKit",
+        "state": {
+          "branch": "master",
+          "revision": "6db80694e48b6fa5d4d7ef36e4562ad93dcc9d85",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
