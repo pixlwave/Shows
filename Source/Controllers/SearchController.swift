@@ -58,7 +58,7 @@ class SearchController: UICollectionViewController {
     }
     
     func applySnapshot() {
-        let snapshot = NSDiffableDataSourceSnapshot<Int, Channel>()
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Channel>()
         
         if let query = searchController.searchBar.text, !query.isEmpty {
             snapshot.appendSections([0])

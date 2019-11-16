@@ -95,7 +95,7 @@ class ShowController: UICollectionViewController {
     }
     
     @objc func reloadData() {
-        let snapshot = NSDiffableDataSourceSnapshot<Int, Video>()
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Video>()
         snapshot.appendSections([0])
         snapshot.appendItems(show?.playlist ?? [Video]())
         dataSource.apply(snapshot)

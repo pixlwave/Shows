@@ -79,7 +79,7 @@ class SubscriptionsController: UICollectionViewController {
     }
     
     @objc func reloadData() {
-        let snapshot = NSDiffableDataSourceSnapshot<Section, Channel>()
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Channel>()
         snapshot.appendSections([.main])
         snapshot.appendItems(Invidious.subscriptions)
         dataSource.apply(snapshot)
