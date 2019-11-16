@@ -5,9 +5,9 @@
         "package": "XCDYouTubeKit",
         "repositoryURL": "https://github.com/0xced/XCDYouTubeKit",
         "state": {
-          "branch": "master",
-          "revision": "6db80694e48b6fa5d4d7ef36e4562ad93dcc9d85",
-          "version": null
+          "branch": null,
+          "revision": "21168d0a50601bce698268db78768a01844cb36c",
+          "version": "2.8.2"
         }
       }
     ]
