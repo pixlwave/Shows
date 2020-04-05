@@ -91,7 +91,6 @@
 		A531813320B6E03400EC9282 = {
 			isa = PBXGroup;
 			children = (
-				A508CD7420BABEF80053A261 /* Shows.entitlements */,
 				A531813E20B6E03400EC9282 /* Source */,
 				A531815120B6E06500EC9282 /* Resources */,
 				A531813D20B6E03400EC9282 /* Products */,
@@ -126,6 +125,7 @@
 				A531814620B6E03400EC9282 /* Assets.xcassets */,
 				A531814820B6E03400EC9282 /* LaunchScreen.storyboard */,
 				A531814B20B6E03400EC9282 /* Info.plist */,
+				A508CD7420BABEF80053A261 /* Shows.entitlements */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -411,7 +411,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Shows.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Resources/Shows.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = NU8A5Y875P;
 				INFOPLIST_FILE = Resources/Info.plist;
@@ -422,6 +422,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = uk.pixlwave.Shows;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -432,7 +433,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Shows.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Resources/Shows.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = NU8A5Y875P;
 				INFOPLIST_FILE = Resources/Info.plist;
@@ -443,6 +444,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = uk.pixlwave.Shows;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
