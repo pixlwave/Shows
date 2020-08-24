@@ -2,7 +2,7 @@ import Foundation
 import CloudKit
 
 #warning("Consider whether this should be a struct?")
-class Channel: Codable, Hashable {
+class Channel: Codable, Hashable, Identifiable {
     let type: String
     let name: String
     let id: String
@@ -35,7 +35,7 @@ class Channel: Codable, Hashable {
     
     var userData: CKRecord?
     
-    var subscribed: Bool { return Invidious.subscriptions.contains { $0.id == id } }
+    var subscribed: Bool { return Invidious.shared.subscriptions.contains { $0.id == id } }
     var thumbnailURL: URL? {
         let thumbnail = thumbnails.filter { $0.width > 200 }.sorted { $0.width < $1.width }.first
         return URL(string: thumbnail?.url ?? "")
@@ -45,12 +45,12 @@ class Channel: Codable, Hashable {
     var nextVideo: Video? { return playlist.filter { $0.progress <= 0 }.first }
     
     func reloadPlaylistItems(completionHandler: @escaping () -> Void) {
-        guard let url = Invidious.channelVideosURL(for: id) else { completionHandler(); return }
+        guard let url = Invidious.shared.channelVideosURL(for: id) else { completionHandler(); return }
         
-        Invidious.queryAPI(with: url) { (data, response, error) in
+        Invidious.shared.queryAPI(with: url) { (data, response, error) in
             if let data = data {
                 do {
-                    self.playlist = try Invidious.decode([Video].self, from: data)
+                    self.playlist = try Invidious.shared.decode([Video].self, from: data)
                     self.refreshUserData()
                 } catch {
                     print("Error \(error)")

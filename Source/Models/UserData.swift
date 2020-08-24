@@ -27,7 +27,7 @@ class UserData {
             subscriptionIDs = Set<String>(record["subscriptionIDs"] as? [String] ?? [String]())
             subscriptionsRecord = record
             
-            Invidious.loadSubscriptions()
+            Invidious.shared.loadSubscriptions()
         }
     }
     

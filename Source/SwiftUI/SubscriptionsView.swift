@@ -1,15 +1,15 @@
 import SwiftUI
 
 struct SubscriptionsView: View {
+    @ObservedObject var invidious = Invidious.shared
+    
     var body: some View {
         NavigationView {
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 90))]) {
-                    ChannelCell()
-                    ChannelCell()
-                    ChannelCell()
-                    ChannelCell()
-                    ChannelCell()
+                    ForEach(invidious.subscriptions) { channel in
+                        ChannelCell(channel: channel)
+                    }
                 }
                 .padding(8)
             }
@@ -22,17 +22,20 @@ struct SubscriptionsView: View {
 }
 
 struct ChannelCell: View {
+    let channel: Channel
+    
     var body: some View {
-        NavigationLink(destination: ShowView()) {
+        NavigationLink(destination: ShowView(channel: channel)) {
             VStack {
                 Image("channel")
                     .resizable()
                     .aspectRatio(1, contentMode: .fit)
                     .mask(Circle())
                     .padding(.horizontal, 5)
-                Text("Channel")
+                Text(channel.name)
                     .font(.caption2)
                     .foregroundColor(.primary)
+                    .lineLimit(1)
                     .padding(.bottom)
             }
         }

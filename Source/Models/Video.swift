@@ -2,7 +2,7 @@ import Foundation
 import CloudKit
 
 #warning("Consider whether this should be a struct?")
-class Video: Codable, Hashable {
+class Video: Codable, Hashable, Identifiable {
     let title: String
     let id: String
     let channel: String
