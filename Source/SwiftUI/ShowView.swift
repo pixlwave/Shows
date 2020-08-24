@@ -1,14 +1,14 @@
 import SwiftUI
 
 struct ShowView: View {
+    let channel: Channel
+    
     var body: some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 275))]) {
-                VidCell()
-                VidCell()
-                VidCell()
-                VidCell()
-                VidCell()
+                ForEach(channel.playlist) { video in
+                    VideoCell(video: video)
+                }
             }
             .padding(8)
         }
@@ -16,7 +16,9 @@ struct ShowView: View {
     }
 }
 
-struct VidCell: View {
+struct VideoCell: View {
+    let video: Video
+    
     var body: some View {
         HStack {
             Image("video")
@@ -27,11 +29,12 @@ struct VidCell: View {
                         .font(.caption)
                         .frame(maxWidth: .infinity)
                         .background(Color.white)
-                        .opacity(0.75),
+                        .opacity(video.watched ? 0.75 : 0.0),
                     alignment: .bottom
                 )
             VStack(alignment: .leading) {
-                Text("Video Name")
+                Text(video.title)
+                    .lineLimit(3)
                 Spacer()
                 Text("12 hours ago")
                     .font(.caption2)
@@ -39,14 +42,14 @@ struct VidCell: View {
             }
             Spacer()
         }
-        .frame(height: 85)
+        .frame(height: 87)
     }
 }
 
-struct ShowView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationView {
-            ShowView()
-        }
-    }
-}
+//struct ShowView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NavigationView {
+//            ShowView()
+//        }
+//    }
+//}
