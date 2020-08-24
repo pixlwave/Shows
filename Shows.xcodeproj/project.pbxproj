@@ -20,6 +20,10 @@
 		A531814A20B6E03400EC9282 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A531814820B6E03400EC9282 /* LaunchScreen.storyboard */; };
 		A531815B20B6E64E00EC9282 /* Invidious.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531815A20B6E64E00EC9282 /* Invidious.swift */; };
 		A566BBA222CFAD8F00A020CF /* XCDYouTubeKit in Frameworks */ = {isa = PBXBuildFile; productRef = A566BBA122CFAD8F00A020CF /* XCDYouTubeKit */; };
+		A56A9AF724F3CB13005818C0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A56A9AF624F3CB13005818C0 /* Images.xcassets */; };
+		A56A9AF824F3CB4B005818C0 /* SubscriptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A9AF424F3CA2B005818C0 /* SubscriptionsView.swift */; };
+		A56A9AFA24F3CEAE005818C0 /* ShowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A9AF924F3CEAE005818C0 /* ShowView.swift */; };
+		A56A9AFC24F3D6BD005818C0 /* SeachView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56A9AFB24F3D6BD005818C0 /* SeachView.swift */; };
 		A56CA4E520BB310B000C38A4 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56CA4E420BB310B000C38A4 /* UserData.swift */; };
 		A59D5F6220C2C54800657998 /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59D5F6120C2C54800657998 /* SearchResultCell.swift */; };
 		A59E581A229F13FA00CA93EB /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59E5819229F13FA00CA93EB /* Video.swift */; };
@@ -58,6 +62,10 @@
 		A531814920B6E03400EC9282 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A531814B20B6E03400EC9282 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A531815A20B6E64E00EC9282 /* Invidious.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Invidious.swift; sourceTree = "<group>"; };
+		A56A9AF424F3CA2B005818C0 /* SubscriptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionsView.swift; sourceTree = "<group>"; };
+		A56A9AF624F3CB13005818C0 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		A56A9AF924F3CEAE005818C0 /* ShowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowView.swift; sourceTree = "<group>"; };
+		A56A9AFB24F3D6BD005818C0 /* SeachView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeachView.swift; sourceTree = "<group>"; };
 		A56CA4E420BB310B000C38A4 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		A59D5F6120C2C54800657998 /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
 		A59E5819229F13FA00CA93EB /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
@@ -93,6 +101,7 @@
 			children = (
 				A531813E20B6E03400EC9282 /* Source */,
 				A531815120B6E06500EC9282 /* Resources */,
+				A56A9AEE24F3C8C4005818C0 /* Previews */,
 				A531813D20B6E03400EC9282 /* Products */,
 				A50547E120C4390400573C11 /* Frameworks */,
 			);
@@ -114,6 +123,7 @@
 				A531815220B6E07800EC9282 /* Controllers */,
 				A531815520B6E0A900EC9282 /* Models */,
 				A5A14F9320B72D3E0089FD4C /* Views */,
+				A56A9AF324F3CA04005818C0 /* SwiftUI */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -151,6 +161,24 @@
 				A5F3990922A4638D00A31931 /* XCDExtensions.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		A56A9AEE24F3C8C4005818C0 /* Previews */ = {
+			isa = PBXGroup;
+			children = (
+				A56A9AF624F3CB13005818C0 /* Images.xcassets */,
+			);
+			path = Previews;
+			sourceTree = "<group>";
+		};
+		A56A9AF324F3CA04005818C0 /* SwiftUI */ = {
+			isa = PBXGroup;
+			children = (
+				A56A9AF424F3CA2B005818C0 /* SubscriptionsView.swift */,
+				A56A9AF924F3CEAE005818C0 /* ShowView.swift */,
+				A56A9AFB24F3D6BD005818C0 /* SeachView.swift */,
+			);
+			path = SwiftUI;
 			sourceTree = "<group>";
 		};
 		A5A14F9320B72D3E0089FD4C /* Views */ = {
@@ -244,6 +272,7 @@
 			files = (
 				A531814A20B6E03400EC9282 /* LaunchScreen.storyboard in Resources */,
 				A531814720B6E03400EC9282 /* Assets.xcassets in Resources */,
+				A56A9AF724F3CB13005818C0 /* Images.xcassets in Resources */,
 				A531814520B6E03400EC9282 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -260,10 +289,13 @@
 				A5A14F9220B72D350089FD4C /* ShowCell.swift in Sources */,
 				A5F2F4B522A18B03003BD69C /* ChannelDetail.swift in Sources */,
 				A531814220B6E03400EC9282 /* SubscriptionsController.swift in Sources */,
+				A56A9AF824F3CB4B005818C0 /* SubscriptionsView.swift in Sources */,
 				A51F1A5A20C2A8FF00D3284C /* SearchController.swift in Sources */,
+				A56A9AFA24F3CEAE005818C0 /* ShowView.swift in Sources */,
 				A531815B20B6E64E00EC9282 /* Invidious.swift in Sources */,
 				A52C40FF20B823430017D7AA /* ShowController.swift in Sources */,
 				A59D5F6220C2C54800657998 /* SearchResultCell.swift in Sources */,
+				A56A9AFC24F3D6BD005818C0 /* SeachView.swift in Sources */,
 				A59E581A229F13FA00CA93EB /* Video.swift in Sources */,
 				A50161A220B815F90060E96A /* MaskedImageView.swift in Sources */,
 				A56CA4E520BB310B000C38A4 /* UserData.swift in Sources */,
@@ -415,9 +447,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Resources/Shows.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = Previews;
 				DEVELOPMENT_TEAM = NU8A5Y875P;
 				INFOPLIST_FILE = Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -437,9 +470,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Resources/Shows.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = Previews;
 				DEVELOPMENT_TEAM = NU8A5Y875P;
 				INFOPLIST_FILE = Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
