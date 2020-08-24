@@ -48,12 +48,10 @@ class Channel: Codable, Hashable, Identifiable {
         guard let url = Invidious.shared.channelVideosURL(for: id) else { completionHandler(); return }
         
         Invidious.shared.queryAPI(with: url) { (data, response, error) in
-            print("\(self.name) url: \(url.absoluteString)")
             if let data = data {
                 do {
                     self.playlist = try Invidious.shared.decode([Video].self, from: data)
                     self.refreshUserData()
-                    print("\(self.name) has \(self.playlist.count) videos")
                 } catch {
                     print("Error \(error)")
                 }
