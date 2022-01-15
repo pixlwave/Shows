@@ -38,6 +38,7 @@ struct SearchCell: View {
     }
 }
 
+
 struct SeachView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {

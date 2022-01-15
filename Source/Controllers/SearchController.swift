@@ -33,7 +33,7 @@ extension SearchController {
         let show = results[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SearchResultCell", for: indexPath) as? SearchResultCell ?? SearchResultCell()
         cell.nameLabel.text = show.name
-        cell.subscriptionStatusLabel.text = show.subscribed ? "Subscribed" : "Subscribe"
+        cell.subscriptionStatusLabel.text = show.isSubscribed ? "Subscribed" : "Subscribe"
         cell.thumbnailImageView.image = nil
         if let url = show.thumbnailURL {
             cell.thumbnailDataTask = Task {
@@ -58,18 +58,18 @@ extension SearchController {
         cell.backgroundColor = UIColor(white: 0.97, alpha: 1.0)
         
         Task {
-            if !searchResult.subscribed {
+            if !searchResult.isSubscribed {
                 do {
-                    try await YouTube.subscribe(to: searchResult.snippet.channelId)
-                    cell.subscriptionStatusLabel.text = searchResult.subscribed ? "Subscribed" : "Subscribe"
+                    try await YouTube.shared.subscribe(to: searchResult.snippet.channelId)
+                    cell.subscriptionStatusLabel.text = searchResult.isSubscribed ? "Subscribed" : "Subscribe"
                     UIView.animate(withDuration: 0.1) { cell.backgroundColor = UIColor.clear }
-                    YouTube.sortSubscriptions()
+                    YouTube.shared.sortSubscriptions()
                 } catch {
                     print(error)
                 }
             } else {
-                YouTube.unsubscribe(from: searchResult.snippet.channelId)
-                cell.subscriptionStatusLabel.text = searchResult.subscribed ? "Subscribed" : "Subscribe"
+                YouTube.shared.unsubscribe(from: searchResult.snippet.channelId)
+                cell.subscriptionStatusLabel.text = searchResult.isSubscribed ? "Subscribed" : "Subscribe"
                 UIView.animate(withDuration: 0.1) { cell.backgroundColor = UIColor.clear }
                 NotificationCenter.default.post(Notification(name: .subsUpdated))
             }
@@ -96,7 +96,7 @@ extension SearchController: UISearchBarDelegate {
         
         Task {
             do {
-                let results = try await YouTube.search(for: query)
+                let results = try await YouTube.shared.search(for: query)
                 self.results = results
                 self.collectionView?.reloadData()
                 if results.count > 0 {

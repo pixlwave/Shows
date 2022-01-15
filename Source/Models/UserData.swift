@@ -7,7 +7,9 @@ class UserData {
     private static var userDB = CKContainer.default().privateCloudDatabase
     private static let subscriptionsRecordID = CKRecord.ID(recordName: "Subscriptions")
     private static var subscriptionsRecord = CKRecord(recordType: "Subscriptions", recordID: subscriptionsRecordID)
-    private static let notificationSubscription = CKQuerySubscription(recordType: "Subscriptions", predicate: NSPredicate(value: true), options: [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion])
+    private static let notificationSubscription = CKQuerySubscription(recordType: "Subscriptions",
+                                                                      predicate: NSPredicate(value: true),
+                                                                      options: [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion])
     private static let notificationInfo = CKSubscription.NotificationInfo()
     
     static func listenForChanges() {
@@ -25,9 +27,9 @@ class UserData {
         Task {
             do {
                 let record = try await userDB.record(for: subscriptionsRecordID)
-                subscriptionIDs = Set<String>(record["subscriptionIDs"] as? [String] ?? [String]())
+                subscriptionIDs = Set<String>(record["subscriptionIDs"] as? [String] ?? [])
                 subscriptionsRecord = record
-                try await YouTube.loadSubscriptions()
+                try await YouTube.shared.loadSubscriptions()
             } catch {
                 print("Subscription Fetch Error")
                 print(error)

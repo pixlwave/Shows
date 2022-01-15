@@ -1,8 +1,7 @@
 import Foundation
 import CloudKit
 
-class Video {
-    
+class Video: Identifiable {
     var id: String
     
     private var item: YTPlaylistItem
@@ -16,10 +15,8 @@ class Video {
     var title: String { return item.snippet.title }
     var thumbnailURL: URL? { return URL(string: item.snippet.thumbnails.medium.url) }
     var publishedAt: Date { return item.snippet.publishedAt }
-    var publishedString: String {
-        guard let formattedTimeInterval = Formatter.timeInterval.string(from: item.snippet.publishedAt, to: Date()) else { return "" }
-        return formattedTimeInterval + " ago"
-    }
+    var publishedString: String { item.snippet.publishedAt.formatted(.relative(presentation: .named)) }
+//    var publishedString: String { "\(item.snippet.publishedAt)" }
     
     var progress: Double {
         get { return userData?["progress"] as? Double ?? 0 }

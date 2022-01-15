@@ -1,6 +1,6 @@
 import Foundation
 
-class YTPlaylistItem: Codable {
+struct YTPlaylistItem: Codable {
     let etag: String
     let id: String
     let snippet: Snippet

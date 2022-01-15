@@ -1,17 +1,7 @@
 import Foundation
 
-class YouTube {
-    
-    private static let key = try! String(contentsOf: Bundle.main.url(forResource: "Key", withExtension: nil)!)
-    private static let session = URLSession.shared
-    private static let jsonDecoder: JSONDecoder = {
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .custom { decoder -> Date in
-            let dateString = try decoder.singleValueContainer().decode(String.self)
-            return Formatter.jsonDate.date(from: dateString) ?? Date()
-        }
-        return decoder
-    }()
+class YouTube: ObservableObject {
+    static let shared = YouTube()
     
     enum APIError: Error {
         case invalidURL
@@ -20,23 +10,41 @@ class YouTube {
         case unknown
     }
     
-    static var subscriptions = [Channel]()
+    private let key = try! String(contentsOf: Bundle.main.url(forResource: "Key", withExtension: nil)!)
+    private let session = URLSession.shared
+    private let jsonDecoder: JSONDecoder
     
-    static func loadSubscriptions() async throws {
-        subscriptions = [Channel]()
-        
-        await withThrowingTaskGroup(of: Void.self) { group in
+    private init() {
+        jsonDecoder = JSONDecoder()
+        jsonDecoder.dateDecodingStrategy = .custom { decoder -> Date in
+            let dateString = try decoder.singleValueContainer().decode(String.self)
+            return Formatter.jsonDate.date(from: dateString) ?? Date()
+        }
+    }
+    
+    @Published var subscriptions = [Channel]()
+    
+    @MainActor
+    func loadSubscriptions() async throws {
+        subscriptions = try await withThrowingTaskGroup(of: Channel.self) { group in
+            var channels = [Channel]()
             for id in UserData.subscriptionIDs {
                 group.addTask {
-                    try await subscribe(to: id)
+                    try await self.channel(for: id)
                 }
             }
+            
+            for try await channel in group {
+                channels.append(channel)
+            }
+            
+            return channels
         }
         
         sortSubscriptions()
     }
     
-    static func reload() async throws {
+    func reload() async throws {
         await withThrowingTaskGroup(of: Void.self) { group in
             for channel in subscriptions {
                 group.addTask {
@@ -48,29 +56,33 @@ class YouTube {
         sortSubscriptions()
     }
     
-    static func search(for query: String) async throws -> [YTSearchResult]  {
+    func search(for query: String) async throws -> [YTSearchResult]  {
         guard let url = channelSearchURL(for: query) else { throw APIError.invalidURL }
         let searchList = try await queryAPI(with: url, as: YTSearchListResonse.self)
         return searchList.items
     }
     
-    static func subscribe(to id: String) async throws {
+    func channel(for id: String) async throws -> Channel {
         guard let url = channelItemListURL(for: id) else { throw APIError.invalidURL }
         let channelList = try await queryAPI(with: url, as: YTChannelListResponse.self)
         guard let channelItem = channelList.items.first else { throw APIError.unknownChannelID }
         let channel = Channel(item: channelItem)
-        subscriptions.append(channel)
-        #warning("This gets called on initial load. Needs getChannel()")
-        UserData.saveSubscription(to: id)
         try await channel.reloadPlaylistItems()
+        return channel
     }
     
-    static func unsubscribe(from id: String) {
+    func subscribe(to id: String) async throws {
+        let channel = try await channel(for: id)
+        subscriptions.append(channel)
+        UserData.saveSubscription(to: id)
+    }
+    
+    func unsubscribe(from id: String) {
         subscriptions = subscriptions.filter {$0.id != id }
         UserData.deleteSubscription(to: id)
     }
     
-    static func channelSearchURL(for query: String) -> URL? {
+    func channelSearchURL(for query: String) -> URL? {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "www.googleapis.com"
@@ -86,7 +98,7 @@ class YouTube {
         return urlComponents.url
     }
     
-    static func channelItemListURL(for channelID: String) -> URL? {
+    func channelItemListURL(for channelID: String) -> URL? {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "www.googleapis.com"
@@ -100,7 +112,7 @@ class YouTube {
         return urlComponents.url
     }
     
-    static func playlistItemListURL(for playlistID: String) -> URL? {
+    func playlistItemListURL(for playlistID: String) -> URL? {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "www.googleapis.com"
@@ -115,7 +127,7 @@ class YouTube {
         return urlComponents.url
     }
     
-    static func queryAPI<T: Decodable>(with url: URL, as type: T.Type) async throws -> T {
+    func queryAPI<T: Decodable>(with url: URL, as type: T.Type) async throws -> T {
         let (data, response) = try await session.data(from: url)
         guard let httpResponse = response as? HTTPURLResponse else { throw APIError.unknown }
         guard httpResponse.statusCode == 200 else { throw APIError.apiResponse(httpResponse, String(data: data, encoding: .utf8)) }
@@ -123,11 +135,11 @@ class YouTube {
         return decoded
     }
     
-    static func decode<T>(_ type: T.Type, from data: Data) throws -> T where T : Decodable {
+    func decode<T>(_ type: T.Type, from data: Data) throws -> T where T : Decodable {
         return try jsonDecoder.decode(type, from: data)
     }
     
-    static func sortSubscriptions() {
+    func sortSubscriptions() {
         subscriptions.sort { channel1, channel2 -> Bool in
             guard let date1 = channel1.nextVideo?.publishedAt else { return false }
             guard let date2 = channel2.nextVideo?.publishedAt else { return true }

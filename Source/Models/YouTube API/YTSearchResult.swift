@@ -22,5 +22,5 @@ struct YTSearchResult: Codable {
     
     var name: String { return snippet.channelTitle }
     var thumbnailURL: URL? { return URL(string: snippet.thumbnails.medium.url) }
-    var subscribed: Bool { return YouTube.subscriptions.contains { $0.id == snippet.channelId } }
+    var isSubscribed: Bool { return YouTube.shared.subscriptions.contains { $0.id == snippet.channelId } }
 }

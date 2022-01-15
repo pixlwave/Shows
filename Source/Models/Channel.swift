@@ -1,7 +1,7 @@
 import Foundation
 import CloudKit
 
-class Channel {
+class Channel: Identifiable {
     
     var id: String
     
@@ -21,8 +21,8 @@ class Channel {
     var nextVideo: Video? { return playlist.filter { $0.progress <= 0 }.first }
     
     func reloadPlaylistItems() async throws {
-        guard let url = YouTube.playlistItemListURL(for: playlistID) else { throw YouTube.APIError.invalidURL }
-        let playlistItemList = try await YouTube.queryAPI(with: url, as: YTPlaylistItemListResponse.self)
+        guard let url = YouTube.shared.playlistItemListURL(for: playlistID) else { throw YouTube.APIError.invalidURL }
+        let playlistItemList = try await YouTube.shared.queryAPI(with: url, as: YTPlaylistItemListResponse.self)
         self.playlist = playlistItemList.items.map { Video(item: $0) }
         self.refreshUserData()
     }
@@ -34,7 +34,8 @@ class Channel {
         operation.fetchRecordsCompletionBlock = { results, error in
             guard let results = results else { print("Fetch Error"); return }
             for video in self.playlist {
-                let record = results.first(where: { $0.key.recordName == video.id })?.value ?? CKRecord(recordType: "VideoUserData", recordID: CKRecord.ID(recordName: video.id))
+                let record = results.first(where: { $0.key.recordName == video.id })?.value ?? CKRecord(recordType: "VideoUserData",
+                                                                                                        recordID: CKRecord.ID(recordName: video.id))
                 video.userData = record
             }
             DispatchQueue.main.async { NotificationCenter.default.post(Notification(name: .showUpdated)) }

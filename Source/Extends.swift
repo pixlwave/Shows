@@ -9,17 +9,10 @@ extension Notification.Name {
 
 extension Formatter {
     
+    #warning("This is not working correctly for some dates")
     static let jsonDate: ISO8601DateFormatter = {
         let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        return formatter
-    }()
-    
-    static let timeInterval: DateComponentsFormatter = {
-        let formatter = DateComponentsFormatter()
-        formatter.unitsStyle = .full
-        formatter.maximumUnitCount = 1
-        formatter.allowedUnits = [.day, .hour, .minute]
+        formatter.formatOptions = [.withInternetDateTime]
         return formatter
     }()
     

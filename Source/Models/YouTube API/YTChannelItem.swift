@@ -1,7 +1,7 @@
 import Foundation
 import CloudKit
 
-class YTChannelItem: Codable {
+struct YTChannelItem: Codable {
     let etag: String
     let id: String
     let snippet: Snippet
