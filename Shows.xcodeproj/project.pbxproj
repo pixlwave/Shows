@@ -30,10 +30,14 @@
 		A5680E7820BF2C2B00BF9C11 /* PlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5680E7720BF2C2B00BF9C11 /* PlayerController.swift */; };
 		A56CA4E520BB310B000C38A4 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56CA4E420BB310B000C38A4 /* UserData.swift */; };
 		A5783FD820C2DB5300DF7417 /* YTSearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5783FD720C2DB5300DF7417 /* YTSearchResult.swift */; };
+		A57C01B427933BD7007C62D2 /* SeachView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57C01B127933BD6007C62D2 /* SeachView.swift */; };
+		A57C01B527933BD7007C62D2 /* ShowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57C01B227933BD6007C62D2 /* ShowView.swift */; };
+		A57C01B627933BD7007C62D2 /* SubscriptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57C01B327933BD6007C62D2 /* SubscriptionsView.swift */; };
 		A57F379F20B9E3BC006255F8 /* YTThumbnails.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57F379E20B9E3BC006255F8 /* YTThumbnails.swift */; };
 		A59D5F6220C2C54800657998 /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59D5F6120C2C54800657998 /* SearchResultCell.swift */; };
 		A5A14F9020B72AED0089FD4C /* Extends.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A14F8F20B72AED0089FD4C /* Extends.swift */; };
 		A5A14F9220B72D350089FD4C /* ShowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A14F9120B72D350089FD4C /* ShowCell.swift */; };
+		A5FDFD7227933D4E00742117 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5FDFD5727933C7600742117 /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,10 +67,14 @@
 		A5680E7720BF2C2B00BF9C11 /* PlayerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerController.swift; sourceTree = "<group>"; };
 		A56CA4E420BB310B000C38A4 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		A5783FD720C2DB5300DF7417 /* YTSearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YTSearchResult.swift; sourceTree = "<group>"; };
+		A57C01B127933BD6007C62D2 /* SeachView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeachView.swift; sourceTree = "<group>"; };
+		A57C01B227933BD6007C62D2 /* ShowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowView.swift; sourceTree = "<group>"; };
+		A57C01B327933BD6007C62D2 /* SubscriptionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscriptionsView.swift; sourceTree = "<group>"; };
 		A57F379E20B9E3BC006255F8 /* YTThumbnails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YTThumbnails.swift; sourceTree = "<group>"; };
 		A59D5F6120C2C54800657998 /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
 		A5A14F8F20B72AED0089FD4C /* Extends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extends.swift; sourceTree = "<group>"; };
 		A5A14F9120B72D350089FD4C /* ShowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowCell.swift; sourceTree = "<group>"; };
+		A5FDFD5727933C7600742117 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +103,7 @@
 				A508CD7420BABEF80053A261 /* Shows.entitlements */,
 				A531813E20B6E03400EC9282 /* Source */,
 				A531815120B6E06500EC9282 /* Resources */,
+				A5FDFD5627933C7600742117 /* Previews */,
 				A531813D20B6E03400EC9282 /* Products */,
 				A50547E120C4390400573C11 /* Frameworks */,
 			);
@@ -116,6 +125,7 @@
 				A531815220B6E07800EC9282 /* Controllers */,
 				A531815520B6E0A900EC9282 /* Models */,
 				A5A14F9320B72D3E0089FD4C /* Views */,
+				A57C01B027933BD6007C62D2 /* SwiftUI */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -170,6 +180,16 @@
 			path = "YouTube API";
 			sourceTree = "<group>";
 		};
+		A57C01B027933BD6007C62D2 /* SwiftUI */ = {
+			isa = PBXGroup;
+			children = (
+				A57C01B127933BD6007C62D2 /* SeachView.swift */,
+				A57C01B227933BD6007C62D2 /* ShowView.swift */,
+				A57C01B327933BD6007C62D2 /* SubscriptionsView.swift */,
+			);
+			path = SwiftUI;
+			sourceTree = "<group>";
+		};
 		A5A14F9320B72D3E0089FD4C /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -179,6 +199,14 @@
 				A50161A120B815F90060E96A /* MaskedImageView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		A5FDFD5627933C7600742117 /* Previews */ = {
+			isa = PBXGroup;
+			children = (
+				A5FDFD5727933C7600742117 /* Images.xcassets */,
+			);
+			path = Previews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -253,6 +281,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A50161A020B811130060E96A /* Key in Resources */,
+				A5FDFD7227933D4E00742117 /* Images.xcassets in Resources */,
 				A531814A20B6E03400EC9282 /* LaunchScreen.storyboard in Resources */,
 				A531814720B6E03400EC9282 /* Assets.xcassets in Resources */,
 				A531814520B6E03400EC9282 /* Main.storyboard in Resources */,
@@ -271,6 +300,8 @@
 				A57F379F20B9E3BC006255F8 /* YTThumbnails.swift in Sources */,
 				A5783FD820C2DB5300DF7417 /* YTSearchResult.swift in Sources */,
 				A531816620B6ED5700EC9282 /* YTPageInfo.swift in Sources */,
+				A57C01B527933BD7007C62D2 /* ShowView.swift in Sources */,
+				A57C01B427933BD7007C62D2 /* SeachView.swift in Sources */,
 				A531816420B6ED1000EC9282 /* YTChannelListResponse.swift in Sources */,
 				A531816820B6F74B00EC9282 /* YTPlaylistItemListResponse.swift in Sources */,
 				A51F1A5820C2A34000D3284C /* YTSearchListResponse.swift in Sources */,
@@ -282,6 +313,7 @@
 				A52C40FF20B823430017D7AA /* ShowController.swift in Sources */,
 				A59D5F6220C2C54800657998 /* SearchResultCell.swift in Sources */,
 				A537747420CB35AE003131F0 /* Channel.swift in Sources */,
+				A57C01B627933BD7007C62D2 /* SubscriptionsView.swift in Sources */,
 				A50161A220B815F90060E96A /* MaskedImageView.swift in Sources */,
 				A56CA4E520BB310B000C38A4 /* UserData.swift in Sources */,
 				A5A14F9020B72AED0089FD4C /* Extends.swift in Sources */,
@@ -430,6 +462,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Shows.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"Previews\"";
 				DEVELOPMENT_TEAM = NU8A5Y875P;
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -448,6 +481,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Shows.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"Previews\"";
 				DEVELOPMENT_TEAM = NU8A5Y875P;
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
