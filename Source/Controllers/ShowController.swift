@@ -36,8 +36,8 @@ class ShowController: UICollectionViewController {
     }
     
     @objc func refreshShow() {
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.show?.reloadPlaylistItems { }
+        Task {
+            try? await show?.reloadPlaylistItems()
         }
     }
     
@@ -100,7 +100,11 @@ extension ShowController {
         cell.publishedAtLabel.text = video.publishedString
         
         if let url = video.thumbnailURL {
-            cell.thumbnailImageView.load(from: url)
+            cell.thumbnailDataTask = Task {
+                let (data, _) = try await URLSession.shared.data(from: url)
+                guard let image = UIImage(data: data) else { return }
+                cell.thumbnailImageView.image = image
+            }
         }
         
         return cell

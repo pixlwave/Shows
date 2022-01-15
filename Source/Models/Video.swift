@@ -24,7 +24,7 @@ class Video {
     var progress: Double {
         get { return userData?["progress"] as? Double ?? 0 }
         set {
-            let record = userData ?? CKRecord(recordType: "VideoUserData", recordID: CKRecordID(recordName: id))
+            let record = userData ?? CKRecord(recordType: "VideoUserData", recordID: CKRecord.ID(recordName: id))
             record["progress"] = newValue as CKRecordValue
             UserData.save(record)
             userData = record

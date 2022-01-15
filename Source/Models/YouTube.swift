@@ -6,78 +6,63 @@ class YouTube {
     private static let session = URLSession.shared
     private static let jsonDecoder: JSONDecoder = {
         let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .custom({ decoder -> Date in
+        decoder.dateDecodingStrategy = .custom { decoder -> Date in
             let dateString = try decoder.singleValueContainer().decode(String.self)
             return Formatter.jsonDate.date(from: dateString) ?? Date()
-        })
+        }
         return decoder
     }()
     
+    enum APIError: Error {
+        case invalidURL
+        case unknownChannelID
+        case apiResponse(HTTPURLResponse, String?)
+        case unknown
+    }
+    
     static var subscriptions = [Channel]()
     
-    static func loadSubscriptions() {
+    static func loadSubscriptions() async throws {
         subscriptions = [Channel]()
-        let group = DispatchGroup()
         
-        for id in UserData.subscriptionIDs {
-            group.enter()
-            subscribe(to: id) { group.leave() }
-        }
-        
-        group.notify(queue: DispatchQueue.main, work: DispatchWorkItem(block: {
-            sortSubscriptions()
-        }))
-    }
-    
-    static func reload() {
-        let group = DispatchGroup()
-        
-        for channel in subscriptions {
-            group.enter()
-            channel.reloadPlaylistItems { group.leave() }
-        }
-        
-        group.notify(queue: DispatchQueue.main, work: DispatchWorkItem(block: {
-            sortSubscriptions()
-        }))
-    }
-    
-    static func search(for query: String, completionHandler: @escaping ([YTSearchResult]) -> Void) {
-        guard let url = channelSearchURL(for: query) else { completionHandler([YTSearchResult]()); return }
-        
-        queryAPI(with: url) { data, response, error in
-            if let data = data {
-                do {
-                    let searchList = try jsonDecoder.decode(YTSearchListResonse.self, from: data)
-                    completionHandler(searchList.items)
-                } catch {
-                    print("Error \(error)")
-                    completionHandler([YTSearchResult]())
+        await withThrowingTaskGroup(of: Void.self) { group in
+            for id in UserData.subscriptionIDs {
+                group.addTask {
+                    try await subscribe(to: id)
                 }
             }
         }
+        
+        sortSubscriptions()
     }
     
-    static func subscribe(to id: String, completionHandler: @escaping () -> Void) {
-        guard let url = channelItemListURL(for: id) else { completionHandler(); return }
-        
-        queryAPI(with: url) { (data, response, error) in
-            if let data = data {
-                do {
-                    let channelList = try jsonDecoder.decode(YTChannelListResponse.self, from: data)
-                    guard let channelItem = channelList.items.first else { completionHandler(); return }
-                    let channel = Channel(item: channelItem)
-                    subscriptions.append(channel)
-                    UserData.saveSubscription(to: id)    // FIXME: This gets called on initial load. Needs getChannel()
-                    channel.reloadPlaylistItems(completionHandler: completionHandler)
-                } catch {
-                    print("Error \(error)")
-                    completionHandler()
+    static func reload() async throws {
+        await withThrowingTaskGroup(of: Void.self) { group in
+            for channel in subscriptions {
+                group.addTask {
+                    try await channel.reloadPlaylistItems()
                 }
-            } else {
-                completionHandler()
             }
         }
+        
+        sortSubscriptions()
+    }
+    
+    static func search(for query: String) async throws -> [YTSearchResult]  {
+        guard let url = channelSearchURL(for: query) else { throw APIError.invalidURL }
+        let searchList = try await queryAPI(with: url, as: YTSearchListResonse.self)
+        return searchList.items
+    }
+    
+    static func subscribe(to id: String) async throws {
+        guard let url = channelItemListURL(for: id) else { throw APIError.invalidURL }
+        let channelList = try await queryAPI(with: url, as: YTChannelListResponse.self)
+        guard let channelItem = channelList.items.first else { throw APIError.unknownChannelID }
+        let channel = Channel(item: channelItem)
+        subscriptions.append(channel)
+        #warning("This gets called on initial load. Needs getChannel()")
+        UserData.saveSubscription(to: id)
+        try await channel.reloadPlaylistItems()
     }
     
     static func unsubscribe(from id: String) {
@@ -130,8 +115,12 @@ class YouTube {
         return urlComponents.url
     }
     
-    static func queryAPI(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
-        session.dataTask(with: url, completionHandler: completionHandler).resume()
+    static func queryAPI<T: Decodable>(with url: URL, as type: T.Type) async throws -> T {
+        let (data, response) = try await session.data(from: url)
+        guard let httpResponse = response as? HTTPURLResponse else { throw APIError.unknown }
+        guard httpResponse.statusCode == 200 else { throw APIError.apiResponse(httpResponse, String(data: data, encoding: .utf8)) }
+        let decoded = try jsonDecoder.decode(T.self, from: data)
+        return decoded
     }
     
     static func decode<T>(_ type: T.Type, from data: Data) throws -> T where T : Decodable {

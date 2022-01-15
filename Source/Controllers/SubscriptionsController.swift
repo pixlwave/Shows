@@ -1,20 +1,24 @@
 import UIKit
+import Combine
 
 class SubscriptionsController: UICollectionViewController {
     
     var refreshControl = UIRefreshControl()
+    var updateCancellable: AnyCancellable?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         refreshControl.addTarget(self, action: #selector(refreshSubscriptions), for: .valueChanged)
-        collectionView?.refreshControl = refreshControl
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+        collectionView.refreshControl = refreshControl
+        collectionView.setContentOffset(CGPoint(x: 0, y: -refreshControl.frame.height), animated: false)
+        refreshControl.beginRefreshing()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .subsUpdated, object: nil)
+        updateCancellable = NotificationCenter.default.publisher(for: .subsUpdated, object: nil)
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                self.reloadData()
+            }
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -31,8 +35,8 @@ class SubscriptionsController: UICollectionViewController {
     }
     
     @objc func refreshSubscriptions() {
-        DispatchQueue.global(qos: .userInitiated).async {
-            YouTube.reload()
+        Task {
+            try? await YouTube.reload()
         }
     }
     
@@ -96,7 +100,11 @@ extension SubscriptionsController {
         cell.thumbnailImageView.image = nil
         
         if let url = show.thumbnailURL {
-            cell.thumbnailImageView.load(from: url)
+            cell.thumbnailDataTask = Task {
+                let (data, _) = try await URLSession.shared.data(from: url)
+                guard let image = UIImage(data: data) else { return }
+                cell.thumbnailImageView.image = image
+            }
         }
         
         return cell

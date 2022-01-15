@@ -27,8 +27,8 @@ class YTChannelItem: Codable {
         
         struct RelatedPlaylists: Codable {
             let uploads: String
-            let watchHistory: String
-            let watchLater: String
+            let watchHistory: String?
+            let watchLater: String?
         }
     }
 }

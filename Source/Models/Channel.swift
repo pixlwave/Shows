@@ -20,31 +20,21 @@ class Channel {
     var playlist = [Video]()
     var nextVideo: Video? { return playlist.filter { $0.progress <= 0 }.first }
     
-    func reloadPlaylistItems(completionHandler: @escaping () -> Void) {
-        guard let url = YouTube.playlistItemListURL(for: playlistID) else { completionHandler(); return }
-        
-        YouTube.queryAPI(with: url) { (data, response, error) in
-            if let data = data {
-                do {
-                    let playlistItemList = try YouTube.decode(YTPlaylistItemListResponse.self, from: data)
-                    self.playlist = playlistItemList.items.map { Video(item: $0) }
-                    self.refreshUserData()
-                } catch {
-                    print("Error \(error)")
-                }
-            }
-            completionHandler()
-        }
+    func reloadPlaylistItems() async throws {
+        guard let url = YouTube.playlistItemListURL(for: playlistID) else { throw YouTube.APIError.invalidURL }
+        let playlistItemList = try await YouTube.queryAPI(with: url, as: YTPlaylistItemListResponse.self)
+        self.playlist = playlistItemList.items.map { Video(item: $0) }
+        self.refreshUserData()
     }
     
     func refreshUserData() {
         // download latest cloudkit records and attach to videos
-        let recordIDs = self.playlist.map { CKRecordID(recordName: $0.id) }
+        let recordIDs = self.playlist.map { CKRecord.ID(recordName: $0.id) }
         let operation = CKFetchRecordsOperation(recordIDs: recordIDs)
         operation.fetchRecordsCompletionBlock = { results, error in
             guard let results = results else { print("Fetch Error"); return }
             for video in self.playlist {
-                let record = results.first(where: { $0.key.recordName == video.id })?.value ?? CKRecord(recordType: "VideoUserData", recordID: CKRecordID(recordName: video.id))
+                let record = results.first(where: { $0.key.recordName == video.id })?.value ?? CKRecord(recordType: "VideoUserData", recordID: CKRecord.ID(recordName: video.id))
                 video.userData = record
             }
             DispatchQueue.main.async { NotificationCenter.default.post(Notification(name: .showUpdated)) }
