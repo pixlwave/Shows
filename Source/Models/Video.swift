@@ -1,11 +1,17 @@
 import Foundation
 import CloudKit
 
-class Video: Identifiable {
+class Video: ObservableObject, Identifiable {
     var id: String
     
     private var item: YTPlaylistItem
-    var userData: CKRecord?
+    var userData: CKRecord? {
+        willSet {
+            DispatchQueue.main.async {
+                self.objectWillChange.send()
+            }
+        }
+    }
     
     init(item: YTPlaylistItem) {
         self.id = item.snippet.resourceId.videoId

@@ -4,7 +4,6 @@ import WebKit
 class PlayerController: UIViewController {
     
     var video: Video?
-    weak var videoCell: VideoCell?
     
     @IBOutlet weak var videoLoadingIndicator: UIActivityIndicatorView!
     
@@ -49,14 +48,6 @@ class PlayerController: UIViewController {
         guard let progress = notification.userInfo?["progress"] as? Double else { return }
         guard let video = video else { return }
         video.progress = progress
-        videoCell?.watchedLabel.isHidden = video.progress <= 0
-    }
-    
-    @IBAction func shareVideo(_ sender: UIBarButtonItem) {
-        guard let video = video, let shareURL = URL(string: "https://youtu.be/\(video.id)") else { return }
-        let shareSheet = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
-        shareSheet.popoverPresentationController?.barButtonItem = sender    // FIXME: centre sheet arrow on button
-        present(shareSheet, animated: true)
     }
     
     func loadEmbedHTML() {
