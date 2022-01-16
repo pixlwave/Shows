@@ -11,12 +11,17 @@ struct SubscriptionsView: View {
                         ChannelCell(channel: channel)
                     }
                 }
+                .refreshable { try? await youtube.reload() }
                 .padding(8)
             }
             .navigationTitle("Shows")
-            .navigationBarItems(trailing: NavigationLink(destination: SearchView()) {
-                Image(systemName: "plus")
-            })
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    NavigationLink(destination: SearchView()) {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
         }
     }
 }
@@ -27,11 +32,16 @@ struct ChannelCell: View {
     var body: some View {
         NavigationLink(destination: ShowView(channel: channel)) {
             VStack {
-                Image("channel")
-                    .resizable()
-                    .aspectRatio(1, contentMode: .fit)
-                    .mask(Circle())
-                    .padding(.horizontal, 5)
+                AsyncImage(url: channel.thumbnailURL) { image in
+                    image.resizable()
+                } placeholder: {
+                    Image("channel").resizable()
+
+                }
+                .aspectRatio(1, contentMode: .fit)
+                .mask(Circle())
+                .padding(.horizontal, 5)
+                
                 Text(channel.name)
                     .font(.caption2)
                     .foregroundColor(.primary)

@@ -10,6 +10,7 @@ struct ShowView: View {
                     VideoCellUI(video: video)
                 }
             }
+            .refreshable { try? await channel.reloadPlaylistItems() }
             .padding(8)
         }
         .navigationBarTitle("Show", displayMode: .inline)
@@ -21,17 +22,21 @@ struct VideoCellUI: View {
     
     var body: some View {
         HStack {
-            Image("video")
-                .resizable()
-                .aspectRatio(16 / 9, contentMode: .fit)
-                .overlay(
-                    Text("Watched")
-                        .font(.caption)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.white)
-                        .opacity(video.watched ? 0.75 : 0.0),
-                    alignment: .bottom
-                )
+            AsyncImage(url: video.thumbnailURL) { image in
+                image.resizable()
+            } placeholder: {
+                Image("video").resizable()
+            }
+            .aspectRatio(16 / 9, contentMode: .fit)
+            .overlay(
+                Text("Watched")
+                    .font(.caption)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.white)
+                    .opacity(video.watched ? 0.75 : 0.0),
+                alignment: .bottom
+            )
+            
             VStack(alignment: .leading) {
                 Text(video.title)
                     .lineLimit(3)

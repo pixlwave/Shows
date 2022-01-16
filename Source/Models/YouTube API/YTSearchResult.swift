@@ -1,16 +1,17 @@
 import Foundation
 
-struct YTSearchResult: Codable {
+struct YTSearchResult: Codable, Identifiable {
     let etag: String
     let id: ID
     let snippet: Snippet
 
-    struct ID: Codable {
+    struct ID: Codable, Hashable {
         let kind: String
         let videoId: String?
         let channelId: String?
         let playlistId: String?
     }
+    
     struct Snippet: Codable {
         let publishedAt: Date
         let channelId: String
