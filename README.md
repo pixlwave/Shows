@@ -1,2 +1,2 @@
 # Shows
-A YouTube app based around Shows using the Invidious API
+A YouTube app based around Shows
